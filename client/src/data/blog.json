@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "title": "The Rise of React",
+    "subtitle": "Why React continues to dominate frontend development",
+    "content": "React has become one of the most popular JavaScript libraries for building user interfaces. Its component-based architecture and community support are key reasons for its success...",
+    "createdAt": "2025-08-01T10:30:00Z",
+    "trending": true
+  },
+  {
+    "id": 2,
+    "title": "Tailwind CSS: Utility First",
+    "subtitle": "A new way to style modern web applications",
+    "content": "Tailwind CSS has changed how developers think about styling. Instead of writing traditional CSS, you compose styles using utility classes right in your markup...",
+    "createdAt": "2025-07-28T14:45:00Z",
+    "trending": false
+  },
+  {
+    "id": 3,
+    "title": "Understanding JavaScript Closures",
+    "subtitle": "A key concept for mastering JS",
+    "content": "Closures are functions that remember their lexical scope even when executed outside of it. This makes them powerful and tricky to understand, but once you get it, your code becomes cleaner...",
+    "createdAt": "2025-07-20T08:15:00Z",
+    "trending": true
+  },
+  {
+    "id": 4,
+    "title": "Why You Should Learn TypeScript",
+    "subtitle": "The benefits of static typing in JavaScript",
+    "content": "TypeScript helps you catch bugs before runtime and provides better tooling support. More and more teams are switching to TS for reliability and maintainability...",
+    "createdAt": "2025-07-15T12:00:00Z",
+    "trending": false
+  },
+  {
+    "id": 5,
+    "title": "Getting Started with Vite",
+    "subtitle": "A blazing fast frontend tooling alternative",
+    "content": "Vite is a next-generation frontend build tool that focuses on speed and developer experience. With instant hot module replacement and pre-bundling, it makes React development much smoother...",
+    "createdAt": "2025-07-10T09:50:00Z",
+    "trending": true
+
+  },
+  {
+    "id": 1,
+    "title": "The Rise of React",
+    "subtitle": "Why React continues to dominate frontend development",
+    "content": "React has become one of the most popular JavaScript libraries for building user interfaces. Its component-based architecture and community support are key reasons for its success...",
+    "createdAt": "2025-08-01T10:30:00Z",
+    "trending": true
+  },
+  {
+    "id": 2,
+    "title": "Tailwind CSS: Utility First",
+    "subtitle": "A new way to style modern web applications",
+    "content": "Tailwind CSS has changed how developers think about styling. Instead of writing traditional CSS, you compose styles using utility classes right in your markup...",
+    "createdAt": "2025-07-28T14:45:00Z",
+    "trending": false
+  },
+  {
+    "id": 3,
+    "title": "Understanding JavaScript Closures",
+    "subtitle": "A key concept for mastering JS",
+    "content": "Closures are functions that remember their lexical scope even when executed outside of it. This makes them powerful and tricky to understand, but once you get it, your code becomes cleaner...",
+    "createdAt": "2025-07-20T08:15:00Z",
+    "trending": true
+  },
+  {
+    "id": 4,
+    "title": "Why You Should Learn TypeScript",
+    "subtitle": "The benefits of static typing in JavaScript",
+    "content": "TypeScript helps you catch bugs before runtime and provides better tooling support. More and more teams are switching to TS for reliability and maintainability...",
+    "createdAt": "2025-07-15T12:00:00Z",
+    "trending": false
+  },
+  {
+    "id": 5,
+    "title": "Getting Started with Vite",
+    "subtitle": "A blazing fast frontend tooling alternative",
+    "content": "Vite is a next-generation frontend build tool that focuses on speed and developer experience. With instant hot module replacement and pre-bundling, it makes React development much smoother...",
+    "createdAt": "2025-07-10T09:50:00Z",
+    "trending": true
+
+  }
+]
+
+
