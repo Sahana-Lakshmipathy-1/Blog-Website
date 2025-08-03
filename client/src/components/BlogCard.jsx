@@ -19,9 +19,9 @@ const BlogCard = ({ blog }) => {
     : 'bg-gray-200 text-gray-800 border-gray-300';
 
   return (
-    <div className="grid-3col-3 relative">
+    <div className="grid-3col-3 relative m-1">
       <Card className="h-full flex flex-col justify-between relative">
-        <div className="p-4">
+        <div className="p-5">
           {blog.badge && (
             <div className="absolute top-4 right-4">
               <Badge
@@ -34,11 +34,11 @@ const BlogCard = ({ blog }) => {
           )}
 
           <CardHeader>
-            <CardTitle>{blog.title}</CardTitle>
-            <CardDescription>{blog.subtitle}</CardDescription>
+            <CardTitle className="text-lg mt-4.5">{blog.title}</CardTitle>
+            <CardDescription className="mt-1 ">{blog.subtitle}</CardDescription>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className="mt-2 ml-0.5">
             <p>{blog.content}</p>
           </CardContent>
         </div>
