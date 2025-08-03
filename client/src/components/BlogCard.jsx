@@ -21,7 +21,7 @@ const BlogCard = ({ blog }) => {
   return (
     <div className="grid-3col-3 relative m-1">
       <Card className="h-full flex flex-col justify-between relative">
-        <div className="p-5">
+        <div className="p-2">
           {blog.badge && (
             <div className="absolute top-4 right-4">
               <Badge
@@ -39,7 +39,7 @@ const BlogCard = ({ blog }) => {
           </CardHeader>
 
           <CardContent className="mt-2 ml-0.5">
-            <p>{blog.content}</p>
+            <p>{blog.content.slice(0, 100)}...</p>
           </CardContent>
         </div>
 

@@ -1,86 +1,188 @@
 [
   {
     "id": "1",
-    "title": "The Rise of React",
+    "title": "The Rise of React in 2025",
     "subtitle": "Why React continues to dominate frontend development",
-    "content": "React has become one of the most popular JavaScript libraries for building user interfaces. Its component-based architecture and community support are key reasons for its success...",
+    "content": "React has maintained its position as the most popular JavaScript library for building user interfaces, with over 65% of frontend developers using it regularly according to the 2025 State of JS survey. The key to React's enduring success lies in its component-based architecture that promotes reusability and maintainability. With the introduction of React Server Components and enhanced Suspense features, the framework has successfully addressed previous performance limitations while maintaining its core principles. The ecosystem around React continues to flourish, with tools like Next.js and Remix providing fullstack solutions that extend React's capabilities. What truly sets React apart in 2025 is its gradual evolution - unlike some frameworks that introduce breaking changes, React has managed to introduce powerful new features while maintaining backward compatibility. The recent partnership between Meta and the OpenJS Foundation has also ensured more transparent governance of the project. Looking ahead, React's concurrent rendering capabilities position it well to handle the increasing demand for highly interactive, app-like web experiences while maintaining excellent developer ergonomics.",
     "createdAt": "2025-08-01T10:30:00Z",
-    "badge": "New Article"
+    "badge": ""
   },
   {
     "id": "2",
-    "title": "Tailwind CSS: Utility First",
-    "subtitle": "A new way to style modern web applications",
-    "content": "Tailwind CSS has changed how developers think about styling. Instead of writing traditional CSS, you compose styles using utility classes right in your markup...",
+    "title": "Tailwind CSS: The Utility-First Revolution",
+    "subtitle": "How Tailwind changed CSS best practices",
+    "content": "Tailwind CSS has fundamentally transformed how developers approach styling in modern web applications. By shifting from semantic class names to utility classes, Tailwind enables rapid UI development without context switching between HTML and CSS files. In 2025, Tailwind v4.0 introduced significant performance improvements through smarter PurgeCSS integration and just-in-time compilation for all modes. The framework's design token approach aligns perfectly with modern design systems, allowing teams to maintain visual consistency across large applications. What began as a controversial methodology has now become mainstream, with even traditional enterprises adopting Tailwind for its maintainability benefits. The recently added CSS Nesting support and improved developer tools in v4.2 have addressed many of the early criticisms about debugging difficulty. Interestingly, Tailwind has also influenced how designers collaborate with developers, as the utility classes provide a common language for discussing UI implementations. The growing ecosystem of Tailwind plugins and template libraries continues to expand its capabilities while maintaining the core utility-first philosophy.",
     "createdAt": "2025-07-28T14:45:00Z",
     "badge": ""
   },
   {
     "id": "3",
-    "title": "Understanding JavaScript Closures",
-    "subtitle": "A key concept for mastering JS",
-    "content": "Closures are functions that remember their lexical scope even when executed outside of it. This makes them powerful and tricky to understand, but once you get it, your code becomes cleaner...",
+    "title": "JavaScript Closures: The Complete Guide",
+    "subtitle": "Mastering one of JavaScript's most powerful concepts",
+    "content": "Closures remain one of JavaScript's most fundamental yet misunderstood concepts. A closure is created when a function retains access to variables from its lexical scope even when executed outside that scope. This powerful feature enables patterns like module encapsulation, memoization, and function factories. In modern JavaScript (ES2025), closures work seamlessly with block-scoped let/const declarations, offering more predictable behavior than the old var-based closures. Practical applications of closures include: 1) Creating private variables in factory functions, 2) Implementing partial application and currying in functional programming, 3) Managing event handlers with access to component state, and 4) Building efficient memoization caches. The recent V8 engine optimizations have significantly reduced the memory overhead traditionally associated with closures. When debugging closure-related issues, Chrome DevTools' improved Scope panel now visually distinguishes between closure and block-scoped variables. Understanding closures is particularly crucial when working with React hooks, as hooks heavily rely on closure behavior to maintain state between renders. Common pitfalls include unintentional closures in loops and memory leaks from holding onto unnecessary references.",
     "createdAt": "2025-07-20T08:15:00Z",
     "badge": ""
   },
   {
     "id": "4",
-    "title": "Why You Should Learn TypeScript",
-    "subtitle": "The benefits of static typing in JavaScript",
-    "content": "TypeScript helps you catch bugs before runtime and provides better tooling support. More and more teams are switching to TS for reliability and maintainability...",
+    "title": "TypeScript 6.0: Why Every JS Developer Should Upgrade",
+    "subtitle": "The compelling case for TypeScript adoption",
+    "content": "TypeScript has evolved from a Microsoft experiment to the de facto standard for large-scale JavaScript development. The 2025 Stack Overflow survey revealed that 78% of JavaScript developers now use TypeScript, citing improved code quality and developer experience as primary reasons. TypeScript 6.0 introduced several groundbreaking features: 1) Smarter type inference for complex generic patterns, 2) Enhanced satisfies operator for more expressive type constraints, and 3) Native support for decorators following the finalized TC39 proposal. What makes TypeScript particularly valuable in 2025 is its growing ecosystem - major frameworks like React, Vue, and Angular now ship with first-class TypeScript support, and even Node.js provides improved type definitions out of the box. The learning curve has significantly flattened with better error messages and interactive documentation. Companies report 40-60% reduction in production bugs after TypeScript adoption, while maintaining comparable development velocity after the initial onboarding period. The upcoming TypeScript 6.1 roadmap includes even better performance through incremental compilation improvements and enhanced LSP capabilities for all major code editors.",
     "createdAt": "2025-07-15T12:00:00Z",
     "badge": ""
   },
   {
     "id": "5",
-    "title": "Getting Started with Vite",
-    "subtitle": "A blazing fast frontend tooling alternative",
-    "content": "Vite is a next-generation frontend build tool that focuses on speed and developer experience. With instant hot module replacement and pre-bundling, it makes React development much smoother...",
+    "title": "Vite 4.0: The Future of Frontend Tooling",
+    "subtitle": "How Vite is redefining developer experience",
+    "content": "Vite has emerged as the leading alternative to traditional bundlers like webpack, offering near-instantaneous server start and hot module replacement. The secret to Vite's performance lies in its native ES modules-based architecture and intelligent pre-bundling with esbuild. Vite 4.0, released in Q2 2025, introduced several major improvements: 1) Experimental LightningCSS support for 30% faster CSS processing, 2) Enhanced cold-start performance through optimized dependency resolution, and 3) First-class support for WebAssembly modules. What sets Vite apart is its framework-agnostic approach - while it works beautifully with React and Vue, it's equally effective with Svelte, Lit, or plain JavaScript. The plugin ecosystem has matured significantly, with official plugins now available for most common use cases. Benchmark tests show Vite projects compile 5-10x faster than equivalent webpack configurations for medium-sized applications. The growing adoption by major frameworks (including Next.js's new Vite mode) suggests Vite's architecture represents the future of frontend tooling. Looking ahead, the Vite team is focusing on improving production build optimizations and expanding the capabilities of Vite's SSR pipeline.",
     "createdAt": "2025-07-10T09:50:00Z",
     "badge": "Trending"
-
   },
   {
     "id": "6",
-    "title": "The Rise of React",
-    "subtitle": "Why React continues to dominate frontend development",
-    "content": "React has become one of the most popular JavaScript libraries for building user interfaces. Its component-based architecture and community support are key reasons for its success...",
-    "createdAt": "2025-08-01T10:30:00Z",
+    "title": "Next.js 15: The Fullstack Framework Matures",
+    "subtitle": "How Next.js continues to redefine React development",
+    "content": "The release of Next.js 15 in mid-2025 marks a significant milestone in fullstack React development. This version introduces three groundbreaking features: 1) Partial Prerendering (PPR) combines static and dynamic rendering at the component level, offering both performance and flexibility. 2) The new Actions API simplifies data mutations while automatically handling loading states, errors, and optimistic updates. 3) Enhanced compiler optimizations reduce cold start times by 40% compared to Next.js 14. What makes Next.js stand out is its ability to adapt to different architectural needs - from completely static sites to dynamic applications with ISR, SSR, and now PPR. The framework's built-in image optimization now supports AVIF by default, reducing median page weights by 15-20%. Large enterprises report 30% faster development cycles after adopting Next.js due to its integrated routing, data fetching, and rendering solutions. With Vercel's recently announced Edge Functions 2.0, Next.js applications can now execute complex logic at the edge with sub-50ms latency worldwide. The growing plugin ecosystem, particularly for e-commerce and CMS integrations, makes Next.js increasingly versatile for diverse use cases.",
+    "createdAt": "2025-08-02T14:20:00Z",
     "badge": ""
   },
   {
     "id": "7",
-    "title": "Tailwind CSS: Utility First",
-    "subtitle": "A new way to style modern web applications",
-    "content": "Tailwind CSS has changed how developers think about styling. Instead of writing traditional CSS, you compose styles using utility classes right in your markup...",
-    "createdAt": "2025-07-28T14:45:00Z",
-    "badge": "Trending"
+    "title": "The State of Web Animation in 2025",
+    "subtitle": "From CSS transitions to the View Transitions API",
+    "content": "Web animation technologies have undergone a renaissance in 2025, with four major approaches dominating: 1) The View Transitions API now has 92% browser support and enables seamless state transitions with minimal JavaScript. 2) CSS scroll-driven animations allow complex timeline effects tied to scroll position without JS. 3) WebGL libraries like Three.js and PixiJS continue pushing visual boundaries, especially for interactive experiences. 4) The emerging Web Animation Tools (WAT) proposal aims to standardize high-performance animation workflows. What's particularly exciting is how these technologies complement rather than compete - a modern site might use View Transitions for route changes, CSS for micro-interactions, and WebGL for hero sections. Performance considerations remain crucial; the 2025 Web Almanac shows pages with optimized animations have 30% lower bounce rates. New DevTools features like the Animation Inspector help developers debug complex timing functions. Looking ahead, the CSS Motion Path specification (now in Chrome and Firefox) will enable sophisticated movement patterns without JavaScript, while WASM-powered animation runtimes promise cinema-quality effects for product showcases.",
+    "createdAt": "2025-07-25T09:15:00Z",
+    "badge": ""
   },
   {
     "id": "8",
-    "title": "Understanding JavaScript Closures",
-    "subtitle": "A key concept for mastering JS",
-    "content": "Closures are functions that remember their lexical scope even when executed outside of it. This makes them powerful and tricky to understand, but once you get it, your code becomes cleaner...",
-    "createdAt": "2025-07-20T08:15:00Z",
+    "title": "Rust for Frontend Developers: A Practical Guide",
+    "subtitle": "How systems programming enhances web development",
+    "content": "Rust's adoption in frontend toolchains has exploded in 2025, with notable implementations in three areas: 1) Build tools (Turbopack, Vite's new Rust core) offering 10x faster processing than JavaScript equivalents. 2) WASM libraries like Yew and Leptos enabling high-performance browser components. 3) Linters/formatters (Biome, dprint) providing near-instant feedback. For JavaScript developers, Rust offers three key benefits: memory safety without garbage collection, thread-safe concurrency, and predictable performance. The learning curve has softened with better tooling - Rust Analyzer now provides VS Code IntelliSense rivaling TypeScript's, and error messages include interactive suggestions. Practical starting points include: rewriting performance-critical functions as WASM modules, creating custom Vite/Rollup plugins, or contributing to open-source tools. Benchmark tests show Rust-based tools reduce CI/CD times by 60% for large codebases. While not replacing JavaScript for UI logic, Rust excels in build processes, data transformations, and computationally intensive tasks. The 2025 State of Rust survey reveals 38% of frontend developers now use Rust in some capacity, up from 12% in 2023.",
+    "createdAt": "2025-07-18T11:45:00Z",
     "badge": ""
   },
   {
     "id": "9",
-    "title": "Why You Should Learn TypeScript",
-    "subtitle": "The benefits of static typing in JavaScript",
-    "content": "TypeScript helps you catch bugs before runtime and provides better tooling support. More and more teams are switching to TS for reliability and maintainability...",
-    "createdAt": "2025-07-15T12:00:00Z",
+    "title": "CSS Nesting: The End of Preprocessors?",
+    "subtitle": "Native browser support changes CSS architecture",
+    "content": "The widespread adoption of native CSS nesting (now in 95% of browsers) has fundamentally altered styling workflows in 2025. Unlike preprocessor nesting which required compilation, native nesting offers: 1) Better performance through direct browser interpretation. 2) Improved debugging with proper source mapping. 3) Future-proof syntax that evolves with CSS standards. Key differences from Sass include the mandatory & selector for parent references and more intuitive media query nesting. Teams report 30% reduction in stylesheet size through better organization and reduced specificity conflicts. The cascade layers feature (also now well-supported) complements nesting by providing controlled override mechanisms. Migration strategies vary: some projects use PostCSS to gradually adopt nesting, while others rewrite entire codebases to leverage new architecture possibilities. Interestingly, this hasn't eliminated preprocessors entirely - Sass remains popular for its mixins and functions, but many projects now use it alongside native nesting. The CSS Working Group's 2025 roadmap includes nested @scope rules and improved selector specificity controls, further reducing the need for preprocessor abstractions.",
+    "createdAt": "2025-07-10T16:30:00Z",
     "badge": ""
   },
   {
     "id": "10",
-    "title": "Getting Started with Vite",
-    "subtitle": "A blazing fast frontend tooling alternative",
-    "content": "Vite is a next-generation frontend build tool that focuses on speed and developer experience. With instant hot module replacement and pre-bundling, it makes React development much smoother...",
-    "createdAt": "2025-07-10T09:50:00Z",
+    "title": "The Evolution of State Management in React",
+    "subtitle": "From Redux to modern atomic state solutions",
+    "content": "React state management has undergone five distinct eras: 1) The early Flux/Redux period (2015-2018) with centralized stores. 2) The Context API revolution (2018-2021) simplifying prop drilling. 3) The rise of SWR/React Query (2021-2023) for server state. 4) The atomic state movement (2023-2025) with libraries like Jotai and Zustand. 5) The current hybrid approach combining all patterns appropriately. Modern best practices suggest: using server state libraries for async data, atomic state for UI preferences, and Context for truly global needs. The React team's useTransition hook has reduced the need for state management libraries in many cases. Surprisingly, Redux still powers 32% of enterprise React apps (2025 survey) due to its devtools and middleware ecosystem. New entrants like Legend-State offer compile-time optimizations for massive state trees. The key lesson from 2025 is that no single solution fits all - successful projects strategically combine React's built-in capabilities with focused libraries for specific needs. The upcoming React Forget compiler may further reshape state management by automatically optimizing re-renders.",
+    "createdAt": "2025-07-05T13:10:00Z",
     "badge": ""
-
+  },
+  {
+    "id": "11",
+    "title": "Web Components: The Silent Comeback",
+    "subtitle": "How custom elements are gaining enterprise adoption",
+    "content": "Once considered a failed experiment, Web Components now power 28% of design systems (2025 Design Tools Survey) due to four key advancements: 1) Declarative Shadow DOM solves template encapsulation. 2) Custom Element registries enable gradual adoption. 3) Enhanced lifecycle callbacks improve reliability. 4) Framework interoperability has dramatically improved. Major benefits driving adoption include: true framework agnosticism, native browser performance, and perfect isolation for microfrontends. Companies report 40% faster UI consistency audits when using Web Components across React/Vue/Angular teams. The most successful implementations combine: Lit for reactive properties, Storybook for documentation, and OpenWC standards for tooling. Challenges remain around SSR hydration and complex state management, but solutions like Eleventy's Web Components plugin and the emerging Declarative Data Binding proposal show promise. Interestingly, Web Components have found particular success in CMS platforms and design tooling, where longevity outweighs cutting-edge features. The 2025 browser support matrix (97% for Core specs) makes them viable for most applications.",
+    "createdAt": "2025-06-28T15:40:00Z",
+    "badge": ""
+  },
+  {
+    "id": "12",
+    "title": "The AI-Assisted Development Workflow",
+    "subtitle": "How Copilot and beyond are changing programming",
+    "content": "AI coding assistants have evolved from autocomplete tools to full workflow partners in 2025. The current generation offers: 1) Context-aware suggestions understanding entire codebases. 2) Automated test generation with 85% accuracy. 3) Intelligent CI/CD failure diagnosis. 4) Interactive documentation synthesis. Developers report saving 20-30% time on routine tasks but emphasize that AI works best as a pair programmer rather than replacement. The most effective workflows involve: using AI for boilerplate generation, test case expansion, and documentation, while reserving complex architecture for human judgment. Surprisingly, TypeScript codebases benefit more from AI assistance (35% productivity gain) than JavaScript (25%) due to clearer intent signaling. New tools like Amazon CodeWhisperer X and GitHub Copilot Workspace integrate across the entire development lifecycle. Concerns about code quality have led to the rise of AI linters that verify generated code against team patterns. The 2025 Stack Overflow survey shows 72% of developers now use AI tools daily, with 68% reporting improved job satisfaction from reduced repetitive work.",
+    "createdAt": "2025-06-20T10:05:00Z",
+    "badge": "New Article"
+  },
+  {
+    "id": "13",
+    "title": "The Return of Progressive Enhancement",
+    "subtitle": "Building resilient web applications in 2025",
+    "content": "In reaction to increasingly complex SPAs, progressive enhancement has reemerged as a guiding philosophy with three modern interpretations: 1) The HTML-first movement advocates server-rendered core content with JS enhancements. 2) The 'transitional apps' pattern combines MPA navigation with SPA-like transitions. 3) The resilience stack (HTMX + Go/Rust backends) delivers interactivity without heavy client-side JS. Benefits include: 30-50% better Core Web Vitals, improved accessibility by default, and significantly reduced bundle sizes. Modern frameworks like Astro, Enhance, and Qwik have built-in progressive enhancement patterns. Surprisingly, even React can adopt these principles through React Server Components and careful hydration strategies. The 2025 Web Almanac shows PE sites have 20% higher conversion rates on mobile devices due to consistent performance. Key techniques include: semantic HTML foundations, CSS-only interactivity where possible, and lazy-loaded JavaScript for enhancements. The movement doesn't reject modern web capabilities but rather advocates for thoughtful layering of complexity only when needed.",
+    "createdAt": "2025-06-15T14:50:00Z",
+    "badge": ""
+  },
+  {
+    "id": "14",
+    "title": "Bun vs Node: The 2025 Benchmark Report",
+    "subtitle": "Performance comparisons for JavaScript runtimes",
+    "content": "The Bun 2.0 release has narrowed the gap with Node.js in several key areas: 1) Cold start times are now comparable (within 10% difference). 2) HTTP server throughput shows Bun ahead by 15% for simple endpoints but Node maintaining advantage in complex scenarios. 3) Memory usage favors Bun by 20-30% for equivalent workloads. Where Bun shines: rapid prototyping (built-in test runner, package manager), TypeScript development (native transpilation), and single-binary deployment. Node.js maintains strengths: mature ecosystem (92% of npm packages verified compatible), better worker thread implementation, and more predictable performance at scale. The 2025 benchmark data suggests: choose Bun for developer experience and new projects, Node for stability and existing codebases. Interestingly, many teams now use both - Bun for local development and Node in production. The upcoming Node.js 24 release (featuring the new '--jit' experimental flag) may reclaim some performance leadership, continuing the healthy competition driving both runtimes forward.",
+    "createdAt": "2025-06-10T09:25:00Z",
+    "badge": ""
+  },
+  {
+    "id": "15",
+    "title": "The Microfrontend Maturity Model",
+    "subtitle": "Lessons from 5 years of production deployments",
+    "content": "After half a decade of real-world microfrontend implementations, clear best practices have emerged across four maturity levels: 1) Basic (independent deploys) using Module Federation or iframes. 2) Coordinated (shared routing/state) through custom events or state libraries. 3) Optimized (performance isolation) with preloading and dependency sharing. 4) Autonomous (full lifecycle independence) including separate CI/CD and A/B testing. Successful implementations share three traits: clear vertical domain boundaries, standardized communication protocols, and gradual adoption strategies. The 2025 Microfrontend Survey reveals: Module Federation powers 45% of implementations, Web Components 30%, and iframes 15%. Performance metrics show mature deployments maintain sub-100ms interaction delays between microfrontends through careful asset loading strategies. Surprisingly, microfrontends have proven most valuable not for technical reasons but organizational - enabling 40% faster feature development in enterprise teams through decoupled release cycles. The emerging 'micro apps' pattern takes this further, allowing end-users to compose their own dashboards from component microfrontends.",
+    "createdAt": "2025-06-05T11:35:00Z",
+    "badge": ""
+  },
+  {
+  "id": "16",
+  "title": "Ethical AI: Navigating the Bias Minefield",
+  "subtitle": "Why 2025's AI regulations demand transparency",
+  "content": "The EU's AI Act and US Algorithmic Accountability Act of 2025 have forced tech giants to rethink model training. Studies show even advanced LLMs exhibit 18-22% bias in hiring simulations. New tools like IBM's Fairness 360 Kit and open-source Auditing AI now help developers: 1) Identify hidden dataset biases, 2) Quantify fairness metrics across demographics, and 3) Implement post-processing corrections. Google's recent case study showed a 40% reduction in gender bias in resume screening AI after implementing continuous monitoring. However, ethical challenges persist—particularly around 'explainability' in medical diagnostic models. The 2025 MIT Tech Review reports 67% of enterprises now have dedicated AI ethics officers, up from 12% in 2022.",
+  "createdAt": "2025-08-03T09:15:00Z",
+  "badge": "New Article"
+  },
+  {
+  "id": "17",
+  "title": "CRISPR 3.0: Editing the Epigenome",
+  "subtitle": "Breakthroughs in reversible gene modifications",
+  "content": "Scientists at the Broad Institute have successfully demonstrated epigenetic editing (without DNA cuts) to treat sickle cell anemia in trials. Unlike traditional CRISPR, this 'gene whispering' approach modifies gene expression temporarily—like a volume knob for DNA. Key 2025 advancements: 1) 92% reduction in off-target effects, 2) Reversible modifications lasting 6-18 months, and 3) New delivery mechanisms using lipid nanoparticles. The technique shows promise for age-related diseases, with mouse trials reversing cellular aging markers by 30%. Ethical debates continue around enhancement applications, prompting the WHO to release global epigenome editing guidelines last month.",
+  "createdAt": "2025-07-27T14:30:00Z",
+  "badge": "Trending"
+  },
+  {
+  "id": "18",
+  "title": "The Four-Day Workweek: 2025 Global Results",
+  "subtitle": "Data from 150 companies across 12 industries",
+  "content": "The largest four-day workweek trial (Jan-Jun 2025) revealed surprising outcomes: 1) 78% of companies maintained or improved productivity, 2) Employee stress levels dropped by 45%, but 3) Customer-facing roles saw 12% higher burnout due to condensed schedules. Tech and creative sectors adapted best, while healthcare struggled with coverage gaps. Notably, companies that shifted to asynchronous work (vs. fixed 4x8 schedules) saw 22% better results. Germany's IG Metall union now mandates 4-day weeks for 800K workers, while Japan's 'Premium Friday' expansion shows mixed adoption. Economists note a 15% rise in midweek leisure spending, boosting local businesses.",
+  "createdAt": "2025-07-20T11:00:00Z",
+  "badge": ""
+  },
+  {
+  "id": "19",
+  "title": "Personalized Nutrition: Beyond DNA Testing",
+  "subtitle": "How gut microbiome mapping is reshaping diets",
+  "content": "2025's nutrition tech combines AI, continuous glucose monitors, and stool analysis to generate hyper-personalized meal plans. Startups like Viome and ZOE now analyze 1,200+ gut microbial strains (vs. 300 in 2022) to recommend foods that reduce inflammation. Clinical trials show: 1) 42% better glycemic control vs. standard diets, 2) IBS symptom reduction in 68% of users, and 3) Unexpected findings like coffee worsening arthritis in some microbiomes. Critics highlight costs ($299/month average), but insurance providers are piloting coverage for diabetic patients. The FDA recently approved the first microbiome-based prebiotic drug for Crohn's disease.",
+  "createdAt": "2025-07-12T16:45:00Z",
+  "badge": ""
+  },
+  {
+  "id": "20",
+  "title": "The Nostalgia Economy: Why Gen Z Loves the 90s",
+  "subtitle": "From Tamagotchis to thrifted grunge fashion",
+  "content": "A 2025 Nielsen report shows 62% of Gen Z consumers prefer '90s-era products over contemporary designs—driving a $47B retro market. Key trends: 1) Vintage tech (Game Boy sales up 300%), 2) Analog photography (Kodak film production doubled since 2023), and 3) 'Slow social' platforms mimicking early internet chatrooms. Psychologists attribute this to 'decade displacement'—seeking simpler times amid AI overload. Brands like Polaroid and JNCO jeans have successfully relaunched, while Spotify's '90s ADHD Focus' playlists have 12M monthly listeners. Surprisingly, 38% of teens now own a landline phone for 'digital detox' weekends.",
+  "createdAt": "2025-07-05T13:20:00Z",
+  "badge": "Trending"
+  },
+  {
+  "id": "21",
+  "title": "Carbon Capture Breakthrough: MOF Materials",
+  "subtitle": "New metal-organic frameworks absorb 2x more CO2",
+  "content": "MIT chemists have developed MOF-3032, a material that captures carbon at ambient temperatures with 98% efficiency—twice as effective as current DAC systems. Pilot plants in Iceland now pair this with geothermal energy, storing CO2 as rock within 12 months. The 2025 UNEP report notes this could meet 15% of Paris Agreement targets if scaled by 2030. Challenges remain in mass production costs ($120/ton vs. $600/ton for traditional methods). Exxon and Shell are investing $3B in joint ventures, while critics warn against reliance on unproven tech over emissions reductions.",
+  "createdAt": "2025-06-28T10:10:00Z",
+  "badge": "New Article"
+  },
+  {
+  "id": "22",
+  "title": "Deepfake Elections: 2025 Safeguards",
+  "subtitle": "How 43 countries are combating AI disinformation",
+  "content": "With 70 national elections in 2025, governments are deploying: 1) Blockchain-based content provenance (Adobe's CAI standard), 2) Mandatory 'AI-generated' labels (EU Digital Services Act), and 3) Real-time deepfake detection APIs from OpenAI and Meta. India's Election Commission blocked 1.2M synthetic media posts in April alone. However, loopholes persist—voice clones require only 3 seconds of audio now. A Pew Research study shows 58% of voters distrust all video content, threatening democratic engagement. Taiwan's 'Citizen Fact-Check Corps' (500K volunteers) offers a grassroots model gaining global attention.",
+  "createdAt": "2025-06-15T08:30:00Z",
+  "badge": ""
+  },
+  {
+  "id": "23",
+  "title": "Moon Tourism: 2025 Price War Begins",
+  "subtitle": "SpaceX vs. Blue Origin lunar flyby packages",
+  "content": "Elon Musk's announcement of $12M lunar flybys (down from $50M in 2023) has triggered commercial space race 2.0. Key developments: 1) SpaceX's Starship Lunar configured for 12 passengers, 2) Blue Origin's 'Blue Moon' luxury pods with 360° views, and 3) Axiom Space's hybrid ISS/Moon itinerary. Safety concerns linger after 2024's near-miss orbital debris incident. Unexpectedly, 60% of bookings come from couples—inspiring 'Space Weddings LLC' to offer zero-gravity ceremonies. NASA's 2025 regulatory framework mandates $500M insurance per passenger, potentially pricing out smaller operators.",
+  "createdAt": "2025-06-05T12:15:00Z",
+  "badge": "Trending"
   }
+
+
 ]
-
-
