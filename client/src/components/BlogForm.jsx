@@ -66,7 +66,7 @@ const BlogForm = () => {
         </form>
 
         <CardFooter className="text-sm text-muted-foreground">
-          <p>Your blog will be saved in session and shown in preview.</p>
+          <p>Click the button to see the preview.</p>
         </CardFooter>
       </Card>
     </div>

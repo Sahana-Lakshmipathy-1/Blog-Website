@@ -3,12 +3,12 @@ export const handleSubmit = (e, navigate) => {
 
   const data = new FormData(e.target);
   const newBlog = {
-    id: Date.now().toString(), // Always store as string
+    id: Date.now().toString(), 
     title: data.get('title'),
     subtitle: data.get('subtitle'),
     content: data.get('content'),
     createdAt: new Date().toISOString(),
-    badge: 'New Article', // auto badge
+    badge: 'New Article', // setting newly created article as new article
   };
 
   const existing = JSON.parse(localStorage.getItem('blogs')) || [];

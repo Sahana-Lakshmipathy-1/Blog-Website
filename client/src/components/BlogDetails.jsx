@@ -8,10 +8,10 @@ const BlogDetails = () => {
   // Fetch stored blogs from localStorage
   const storedBlogs = JSON.parse(localStorage.getItem('blogs')) || [];
 
-  // Merge static + stored
+  // Merge static stored blogs to render
   const allBlogs = [...blogs, ...storedBlogs];
 
-  // Find blog by ID (ensure string comparison)
+  // Find blog by ID (ensure string comparison) from the array to render
   const blog = allBlogs.find((b) => String(b.id) === id);
 
   if (!blog) {

@@ -1,50 +1,11 @@
-import React, { useEffect, useState } from 'react';
+// 📁 src/pages/BlogLayout.jsx
+
+import React from 'react';
 import BlogCard from '@/components/BlogCard';
-import blogs from '../data/blog.json';
+import useBlogFeed from '@/hooks/useBlogFeed';
 
 const BlogLayout = () => {
-  const [allBlogs, setAllBlogs] = useState([]);
-  const [visibleBlogs, setVisibleBlogs] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadCount, setLoadCount] = useState(6); // How many blogs to load each time
-
-  useEffect(() => {
-    const storedBlogs = JSON.parse(localStorage.getItem('blogs')) || [];
-    const combined = [...blogs, ...storedBlogs];
-
-    // Sort priority: trending (0), normal (1), new (2)
-    combined.sort((a, b) => {
-      const priority = (blog) => blog.badge === 'Trending' ? 0 : blog.badge === 'New Article' ? 2 : 1;
-      return priority(a) - priority(b);
-    });
-
-    setAllBlogs(combined);
-    setVisibleBlogs(combined.slice(0, loadCount));
-  }, []);
-
-  // Scroll listener
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
-        hasMore
-      ) {
-        loadMoreBlogs();
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [visibleBlogs, hasMore]);
-
-  const loadMoreBlogs = () => {
-    const nextBlogs = allBlogs.slice(visibleBlogs.length, visibleBlogs.length + loadCount);
-
-    setVisibleBlogs((prev) => [...prev, ...nextBlogs]);
-    if (visibleBlogs.length + nextBlogs.length >= allBlogs.length) {
-      setHasMore(false);
-    }
-  };
+  const { visibleBlogs, hasMore } = useBlogFeed(); // 👈 Custom hook
 
   return (
     <main>
@@ -57,7 +18,9 @@ const BlogLayout = () => {
       </div>
 
       {hasMore && (
-        <p className="text-center mt-6 text-gray-500 animate-pulse">Loading more blogs...</p>
+        <p className="text-center mt-6 text-gray-500 animate-pulse">
+          Loading more blogs...
+        </p>
       )}
     </main>
   );
