@@ -9,6 +9,7 @@ import Newsletter from '@/pages/Newsletter';
 import Home from '@/pages/Home';
 import Support from '@/pages/Support';
 import About from '@/pages/About';
+import BlogPreview from '@/components/BlogPreview';
 
 
 const AppRoutes = () => {
@@ -23,7 +24,7 @@ const AppRoutes = () => {
       <Route path='/support' element={<Support/>}/>
       <Route path='about' element={<About/>}/>
       <Route path='/newsletter' element={<Newsletter/>}/>
-
+      <Route path='/preview' element={<BlogPreview/>}/>
     </Routes>
   );
 };
