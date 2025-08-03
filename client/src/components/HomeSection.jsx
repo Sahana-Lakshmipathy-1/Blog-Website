@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const HomeSection = () => {
   return (
@@ -11,18 +12,18 @@ const HomeSection = () => {
           Share your stories. Read what others have to say. Be a part of the conversation.
         </p>
         <div className="flex justify-center gap-4">
-          <a
-            href="/blog"
+          <Link
+            to="/blog"
             className="bg-black text-white px-6 py-3 rounded-md hover:bg-gray-900 transition"
           >
             Browse Blogs
-          </a>
-          <a
-            href="/create"
+          </Link>
+          <Link
+            to="/create"
             className="border border-black text-black px-6 py-3 rounded-md hover:bg-gray-100 transition"
           >
             Write a Blog
-          </a>
+          </Link>
         </div>
       </div>
     </section>
