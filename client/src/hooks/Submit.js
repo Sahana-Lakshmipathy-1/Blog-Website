@@ -3,24 +3,19 @@ export const handleSubmit = (e, navigate) => {
 
   const data = new FormData(e.target);
   const newBlog = {
-    id: Date.now(),
+    id: Date.now().toString(), // Always store as string
     title: data.get('title'),
     subtitle: data.get('subtitle'),
     content: data.get('content'),
     createdAt: new Date().toISOString(),
-   badge: 'New Article',
+    badge: 'New Article', // auto badge
   };
 
-  // Get existing blogs from localStorage
-  const storedBlogs = JSON.parse(localStorage.getItem('userBlogs')) || [];
+  const existing = JSON.parse(localStorage.getItem('blogs')) || [];
+  const updatedBlogs = [...existing, newBlog];
 
-  // Add the new blog to the array
-  const updatedBlogs = [...storedBlogs, newBlog];
+  localStorage.setItem('blogs', JSON.stringify(updatedBlogs));
+  alert("Blog saved successfully!");
 
-  // Save back to localStorage
-  localStorage.setItem('userBlogs', JSON.stringify(updatedBlogs));
-
-  alert('Blog saved successfully!');
-
-  navigate('/blog/:id');
+  navigate(`/blog/${newBlog.id}`); // redirect correctly
 };

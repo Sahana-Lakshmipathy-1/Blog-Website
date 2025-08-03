@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": "1",
     "title": "The Rise of React",
     "subtitle": "Why React continues to dominate frontend development",
     "content": "React has become one of the most popular JavaScript libraries for building user interfaces. Its component-based architecture and community support are key reasons for its success...",
@@ -8,7 +8,7 @@
     "badge": "New Article"
   },
   {
-    "id": 2,
+    "id": "2",
     "title": "Tailwind CSS: Utility First",
     "subtitle": "A new way to style modern web applications",
     "content": "Tailwind CSS has changed how developers think about styling. Instead of writing traditional CSS, you compose styles using utility classes right in your markup...",
@@ -16,7 +16,7 @@
     "badge": ""
   },
   {
-    "id": 3,
+    "id": "3",
     "title": "Understanding JavaScript Closures",
     "subtitle": "A key concept for mastering JS",
     "content": "Closures are functions that remember their lexical scope even when executed outside of it. This makes them powerful and tricky to understand, but once you get it, your code becomes cleaner...",
@@ -24,7 +24,7 @@
     "badge": ""
   },
   {
-    "id": 4,
+    "id": "4",
     "title": "Why You Should Learn TypeScript",
     "subtitle": "The benefits of static typing in JavaScript",
     "content": "TypeScript helps you catch bugs before runtime and provides better tooling support. More and more teams are switching to TS for reliability and maintainability...",
@@ -32,7 +32,7 @@
     "badge": ""
   },
   {
-    "id": 5,
+    "id": "5",
     "title": "Getting Started with Vite",
     "subtitle": "A blazing fast frontend tooling alternative",
     "content": "Vite is a next-generation frontend build tool that focuses on speed and developer experience. With instant hot module replacement and pre-bundling, it makes React development much smoother...",
@@ -41,7 +41,7 @@
 
   },
   {
-    "id": 6,
+    "id": "6",
     "title": "The Rise of React",
     "subtitle": "Why React continues to dominate frontend development",
     "content": "React has become one of the most popular JavaScript libraries for building user interfaces. Its component-based architecture and community support are key reasons for its success...",
@@ -49,7 +49,7 @@
     "badge": ""
   },
   {
-    "id": 7,
+    "id": "7",
     "title": "Tailwind CSS: Utility First",
     "subtitle": "A new way to style modern web applications",
     "content": "Tailwind CSS has changed how developers think about styling. Instead of writing traditional CSS, you compose styles using utility classes right in your markup...",
@@ -57,7 +57,7 @@
     "badge": "Trending"
   },
   {
-    "id": 8,
+    "id": "8",
     "title": "Understanding JavaScript Closures",
     "subtitle": "A key concept for mastering JS",
     "content": "Closures are functions that remember their lexical scope even when executed outside of it. This makes them powerful and tricky to understand, but once you get it, your code becomes cleaner...",
@@ -65,7 +65,7 @@
     "badge": ""
   },
   {
-    "id": 9,
+    "id": "9",
     "title": "Why You Should Learn TypeScript",
     "subtitle": "The benefits of static typing in JavaScript",
     "content": "TypeScript helps you catch bugs before runtime and provides better tooling support. More and more teams are switching to TS for reliability and maintainability...",
@@ -73,7 +73,7 @@
     "badge": ""
   },
   {
-    "id": 10,
+    "id": "10",
     "title": "Getting Started with Vite",
     "subtitle": "A blazing fast frontend tooling alternative",
     "content": "Vite is a next-generation frontend build tool that focuses on speed and developer experience. With instant hot module replacement and pre-bundling, it makes React development much smoother...",

@@ -1,25 +1,37 @@
-// src/pages/BlogDetails.jsx
-import { useParams } from 'react-router-dom'
-import blogs from '../data/blog.json'
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import blogs from '../data/blog.json'; // Static blogs
 
 const BlogDetails = () => {
-  const { id } = useParams()
-  const blog = blogs.find((b) => b.id.toString() === id)
+  const { id } = useParams(); // ID from URL (string)
+
+  // Fetch stored blogs from localStorage
+  const storedBlogs = JSON.parse(localStorage.getItem('blogs')) || [];
+
+  // Merge static + stored
+  const allBlogs = [...blogs, ...storedBlogs];
+
+  // Find blog by ID (ensure string comparison)
+  const blog = allBlogs.find((b) => String(b.id) === id);
 
   if (!blog) {
-    return <div className="p-6 text-red-600">Blog not found.</div>
+    return (
+      <div className="text-center text-red-500 mt-10 text-lg font-medium">
+        Blog not found
+      </div>
+    );
   }
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-2">{blog.title}</h1>
-      <p className="text-lg text-gray-600 mb-4">{blog.subtitle}</p>
-      <p className="text-sm text-gray-500 mb-8">
+      <h1 className="text-4xl font-bold mb-2">{blog.title}</h1>
+      <h2 className="text-xl text-gray-600 mb-4">{blog.subtitle}</h2>
+      <p className="text-sm text-gray-400 mb-6">
         Published on {new Date(blog.createdAt).toLocaleDateString()}
       </p>
-      <div className="text-base leading-relaxed">{blog.content}</div>
+      <p className="text-lg leading-relaxed whitespace-pre-line">{blog.content}</p>
     </div>
-  )
-}
+  );
+};
 
-export default BlogDetails
+export default BlogDetails;
