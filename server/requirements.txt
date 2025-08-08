@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+oauthlib
+sqlalchemy
+asyncpg
+databases[postgresql]
+psycopg2-binary
+python-dotenv
+starlette
+httpx
+slowapi
+gunicorn
