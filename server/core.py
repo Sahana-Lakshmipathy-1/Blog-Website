@@ -9,13 +9,13 @@ def db_result(query, values=None):
     connection = None
     cursor = None
     try:
-        print("--- .env Variables ---")
-        print(f"db_username: {os.getenv('db_username')}")
-        print(f"db_password: {os.getenv('db_password')}")
-        print(f"db_host: {os.getenv('db_host')}")
-        print(f"db_port: {os.getenv('db_port')}")
-        print(f"db_database: {os.getenv('db_database')}")
-        print("----------------------")
+        # print("--- .env Variables ---")
+        # print(f"db_username: {os.getenv('db_username')}")
+        # print(f"db_password: {os.getenv('db_password')}")
+        # print(f"db_host: {os.getenv('db_host')}")
+        # print(f"db_port: {os.getenv('db_port')}")
+        # print(f"db_database: {os.getenv('db_database')}")
+        # print("----------------------")
 
         print("Connecting...")
 
@@ -34,8 +34,9 @@ def db_result(query, values=None):
     
         cursor.execute(query, values)
         
+        
+        result = cursor.fetchall()
         connection.commit()
-        result = cursor.fetchone()
         
         return result
     except psycopg2.Error as e:
