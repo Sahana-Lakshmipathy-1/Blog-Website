@@ -19,8 +19,9 @@ class BlogUpdate(BaseModel):
     badge: Optional[str] = None
     delete_flag: Optional[bool] = None  # Soft delete indicator
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True
+    }
 
 class BlogResponse(BlogBase):
     id: UUID  # Changed from int to UUID
@@ -29,5 +30,6 @@ class BlogResponse(BlogBase):
     delete_flag: bool
     username: str
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True
+    }

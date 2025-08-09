@@ -19,12 +19,14 @@ class UserUpdate(BaseModel):
     useremail: Optional[EmailStr] = None
     password: Optional[str] = None
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True
+    }
 
 
 class UserResponse(UserBase):
     userid: UUID  # Changed from int to UUID
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True
+    }

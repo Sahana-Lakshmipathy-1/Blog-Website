@@ -2,18 +2,20 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from uuid import UUID
+
 from models.blog import BlogCreate, BlogResponse, BlogUpdate
 from db.session import get_db
 from crud.blogoperations import (
     create_blog,
+    get_blog_by_title,
     get_blog_by_uuid,
     get_all_blogs,
     get_blogs_by_username,
-    update_blog_by_title,  # You can also add update_blog_by_uuid if needed
-    delete_blog_by_title,  # Same as above for delete
+    update_blog_by_id,
+    delete_blog_by_id,
 )
 
-router = APIRouter(prefix="/blogs", tags=["blogs"])
+router = APIRouter()
 
 @router.post("/", response_model=BlogResponse, status_code=status.HTTP_201_CREATED)
 def create_blog_endpoint(blog: BlogCreate, db: Session = Depends(get_db)):
@@ -22,9 +24,9 @@ def create_blog_endpoint(blog: BlogCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to create blog")
     return created_blog
 
-@router.get("/{blog_id}", response_model=BlogResponse)
-def read_blog(blog_id: UUID, db: Session = Depends(get_db)):
-    blog = get_blog_by_uuid(db, blog_id)
+@router.get("/{title}", response_model=BlogResponse)
+def read_blog(title: str, db: Session = Depends(get_db)):
+    blog = get_blog_by_title(db, title)
     if not blog:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog not found")
     return blog
@@ -37,17 +39,16 @@ def read_all_blogs(db: Session = Depends(get_db)):
 def read_blogs_by_username(username: str, db: Session = Depends(get_db)):
     return get_blogs_by_username(db, username)
 
-# Optional: If you want to support update/delete by UUID instead of title, create those CRUD funcs and update here
-@router.put("/{title}", response_model=BlogResponse)
-def update_blog_endpoint(title: str, blog_update: BlogUpdate, db: Session = Depends(get_db)):
-    updated_blog = update_blog_by_title(db, title, blog_update)
+@router.put("/{blog_id}", response_model=BlogResponse)
+def update_blog_endpoint(blog_id: UUID, blog_update: BlogUpdate, db: Session = Depends(get_db)):
+    updated_blog = update_blog_by_id(db, blog_id, blog_update)
     if not updated_blog:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog not found or update failed")
     return updated_blog
 
-@router.delete("/{title}", response_model=BlogResponse)
-def delete_blog_endpoint(title: str, db: Session = Depends(get_db)):
-    deleted_blog = delete_blog_by_title(db, title)
+@router.delete("/{blog_id}", response_model=BlogResponse)
+def delete_blog_endpoint(blog_id: UUID, db: Session = Depends(get_db)):
+    deleted_blog = delete_blog_by_id(db, blog_id)
     if not deleted_blog:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog not found or delete failed")
     return deleted_blog

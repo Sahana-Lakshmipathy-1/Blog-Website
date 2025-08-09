@@ -22,11 +22,11 @@ def create_blog(db: Session, blog: BlogCreate):
         print(f"Error creating blog: {e}")
         return None
 
-def get_blog_by_uuid(db: Session, blog_id: UUID):
-    return db.query(Blogs).filter(Blogs.id == blog_id, Blogs.delete_flag == False).first()
-
 def get_blog_by_title(db: Session, title: str):
     return db.query(Blogs).filter(Blogs.title == title, Blogs.delete_flag == False).first()
+
+def get_blog_by_uuid(db: Session, blog_id: UUID):
+    return db.query(Blogs).filter(Blogs.id == blog_id, Blogs.delete_flag == False).first()
 
 def get_all_blogs(db: Session):
     return db.query(Blogs).filter(Blogs.delete_flag == False).all()
@@ -34,9 +34,9 @@ def get_all_blogs(db: Session):
 def get_blogs_by_username(db: Session, username: str):
     return db.query(Blogs).filter(Blogs.username == username, Blogs.delete_flag == False).all()
 
-def update_blog_by_title(db: Session, title: str, blog: BlogUpdate):
+def update_blog_by_id(db: Session, blog_id: UUID, blog: BlogUpdate):
     try:
-        db_blog = db.query(Blogs).filter(Blogs.title == title, Blogs.delete_flag == False).first()
+        db_blog = db.query(Blogs).filter(Blogs.id == blog_id, Blogs.delete_flag == False).first()
         if not db_blog:
             return None
         for key, value in blog.dict(exclude_unset=True).items():
@@ -49,9 +49,9 @@ def update_blog_by_title(db: Session, title: str, blog: BlogUpdate):
         print(f"Error updating blog: {e}")
         return None
 
-def delete_blog_by_title(db: Session, title: str):
+def delete_blog_by_id(db: Session, blog_id: UUID):
     try:
-        db_blog = db.query(Blogs).filter(Blogs.title == title).first()
+        db_blog = db.query(Blogs).filter(Blogs.id == blog_id).first()
         if db_blog:
             db_blog.delete_flag = True
             db.commit()

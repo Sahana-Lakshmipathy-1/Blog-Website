@@ -6,13 +6,12 @@ from crud.useroperations import (
     create_user,
     get_user_by_username,
     get_user_by_email,
-    get_all_users,
     update_user_by_username,
     delete_user_by_username,
 )
 from db.session import get_db
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter()
 
 @router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def create_user_endpoint(user: UserCreate, db: Session = Depends(get_db)):
@@ -43,10 +42,6 @@ def read_user(username: str, db: Session = Depends(get_db)):
             detail="User not found",
         )
     return user
-
-@router.get("/", response_model=List[UserResponse])
-def read_all_users(db: Session = Depends(get_db)):
-    return get_all_users(db)
 
 @router.put("/{username}", response_model=UserResponse)
 def update_user_endpoint(username: str, user_update: UserUpdate, db: Session = Depends(get_db)):
