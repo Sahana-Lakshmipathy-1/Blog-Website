@@ -1,18 +1,16 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
-
+from uuid import UUID
 
 class BlogBase(BaseModel):
     title: str
     subtitle: Optional[str] = None
     content: str
 
-
 class BlogCreate(BlogBase):
     username: str  # Foreign key reference to users.username
     badge: Optional[str] = None
-
 
 class BlogUpdate(BaseModel):
     title: Optional[str] = None
@@ -24,9 +22,8 @@ class BlogUpdate(BaseModel):
     class Config:
         orm_mode = True
 
-
 class BlogResponse(BlogBase):
-    id: int
+    id: UUID  # Changed from int to UUID
     created_at: datetime
     badge: str
     delete_flag: bool

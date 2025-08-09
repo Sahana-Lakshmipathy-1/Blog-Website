@@ -4,7 +4,7 @@ from typing import List
 from uuid import UUID
 from models.blog import BlogCreate, BlogResponse, BlogUpdate
 from db.session import get_db
-from crud.blog_crud import (
+from crud.blogoperations import (
     create_blog,
     get_blog_by_uuid,
     get_all_blogs,

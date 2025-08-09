@@ -1,14 +1,13 @@
-from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.orm import Session
-from uuid import UUID
-
+from fastapi import FastAPI
 from db import database
-from crud import blogoperations, useroperations
-from models import blog, user
+
+from router.user_routes import router as user_router
+from router.blog_routes import router as blog_router
+from router.auth_routes import router as auth_router  # Include your auth router here
 
 app = FastAPI()
 
-# Dependency
+# Dependency for DB session
 def get_db():
     db = database.SessionLocal()
     try:
@@ -16,26 +15,7 @@ def get_db():
     finally:
         db.close()
 
-# USER ROUTES
-@app.post("/users/")
-def create_user(user_data: user.UserCreate, db: Session = Depends(get_db)):
-    return useroperations.create_user(db, user_data)
-
-@app.get("/users/{username}")
-def get_user(username: str, db: Session = Depends(get_db)):
-    db_user = useroperations.get_user_by_username(db, username)
-    if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return db_user
-
-# BLOG ROUTES
-@app.post("/blogs/")
-def create_blog(blog_data: blog.BlogCreate, db: Session = Depends(get_db)):
-    return blogoperations.create_blog(db, blog_data)
-
-@app.get("/blogs/{blog_id}")
-def get_blog(blog_id: UUID, db: Session = Depends(get_db)):
-    db_blog = blogoperations.get_blog_by_uuid(db, blog_id)
-    if not db_blog:
-        raise HTTPException(status_code=404, detail="Blog not found")
-    return db_blog
+# Include routers with their own prefixes and tags
+app.include_router(user_router)
+app.include_router(blog_router)
+app.include_router(auth_router)  # enable this once your auth routes are ready

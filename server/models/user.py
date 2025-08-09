@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from uuid import UUID
 
 
 class UserBase(BaseModel):
@@ -23,7 +24,7 @@ class UserUpdate(BaseModel):
 
 
 class UserResponse(UserBase):
-    userid: int
+    userid: UUID  # Changed from int to UUID
 
     class Config:
         orm_mode = True
