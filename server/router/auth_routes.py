@@ -1,5 +1,4 @@
-# auth_routes.py
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
@@ -9,34 +8,48 @@ from utils.security import verify_password, create_access_token
 from models.auth import SignupRequest
 from models.token import Token
 
-
 router = APIRouter()
-
 
 # Pydantic model for login
 class LoginRequest(BaseModel):
     username: str
     password: str
 
+# Helper to get limiter from app state
+def get_limiter(request: Request):
+    return request.app.state.limiter
 
 @router.post("/signup", status_code=status.HTTP_201_CREATED)
-def signup(user: SignupRequest, db: Session = Depends(get_db)):
-    if get_user_by_username(db, user.username):
-        raise HTTPException(status_code=400, detail="Username already exists")
-    created_user = create_user(db, user)
-    if not created_user:
-        raise HTTPException(status_code=500, detail="Error creating user")
-    return {"message": "User created successfully"}
-
+def signup(
+    user: SignupRequest,
+    db: Session = Depends(get_db),
+    limiter=Depends(get_limiter)
+):
+    @limiter.limit("3/minute")  # Limit signups to 3 per minute per IP
+    def inner():
+        if get_user_by_username(db, user.username):
+            raise HTTPException(status_code=400, detail="Username already exists")
+        created_user = create_user(db, user)
+        if not created_user:
+            raise HTTPException(status_code=500, detail="Error creating user")
+        return {"message": "User created successfully"}
+    return inner()
 
 @router.post("/token", response_model=Token)
-def login_for_access_token(login_data: LoginRequest, db: Session = Depends(get_db)):
-    user = get_user_by_username(db, login_data.username)
-    if not user or not verify_password(login_data.password, user.password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token = create_access_token(data={"sub": user.username})
-    return {"access_token": access_token, "token_type": "bearer"}
+def login_for_access_token(
+    login_data: LoginRequest,
+    db: Session = Depends(get_db),
+    limiter=Depends(get_limiter)
+):
+    @limiter.limit("10/minute")  # Limit login attempts to slow brute force
+    def inner():
+        user = get_user_by_username(db, login_data.username)
+        if not user or not verify_password(login_data.password, user.password):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        access_token = create_access_token(data={"sub": user.username})
+        return {"access_token": access_token, "token_type": "bearer"}
+    return inner()

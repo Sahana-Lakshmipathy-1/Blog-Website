@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from typing import List
 from models.user import UserCreate, UserResponse, UserUpdate
@@ -11,10 +11,23 @@ from crud.useroperations import (
 )
 from db.session import get_db
 
+# SlowAPI imports
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+
+limiter = Limiter(key_func=get_remote_address)
 router = APIRouter()
 
+# -------------------------
+# Create User
+# -------------------------
 @router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def create_user_endpoint(user: UserCreate, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")  # prevent abuse of user creation
+def create_user_endpoint(
+    request: Request,
+    user: UserCreate,
+    db: Session = Depends(get_db)
+):
     if get_user_by_username(db, user.username):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -33,8 +46,16 @@ def create_user_endpoint(user: UserCreate, db: Session = Depends(get_db)):
         )
     return created_user
 
+# -------------------------
+# Read User
+# -------------------------
 @router.get("/{username}", response_model=UserResponse)
-def read_user(username: str, db: Session = Depends(get_db)):
+@limiter.limit("30/minute")  # read-heavy, so higher limit
+def read_user(
+    request: Request,
+    username: str,
+    db: Session = Depends(get_db)
+):
     user = get_user_by_username(db, username)
     if not user:
         raise HTTPException(
@@ -43,8 +64,17 @@ def read_user(username: str, db: Session = Depends(get_db)):
         )
     return user
 
+# -------------------------
+# Update User
+# -------------------------
 @router.put("/{username}", response_model=UserResponse)
-def update_user_endpoint(username: str, user_update: UserUpdate, db: Session = Depends(get_db)):
+@limiter.limit("10/minute")  # prevent excessive updates
+def update_user_endpoint(
+    request: Request,
+    username: str,
+    user_update: UserUpdate,
+    db: Session = Depends(get_db)
+):
     updated_user = update_user_by_username(db, username, user_update)
     if not updated_user:
         raise HTTPException(
@@ -53,8 +83,16 @@ def update_user_endpoint(username: str, user_update: UserUpdate, db: Session = D
         )
     return updated_user
 
+# -------------------------
+# Delete User
+# -------------------------
 @router.delete("/{username}", response_model=UserResponse)
-def delete_user_endpoint(username: str, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")  # restrict delete attempts
+def delete_user_endpoint(
+    request: Request,
+    username: str,
+    db: Session = Depends(get_db)
+):
     deleted_user = delete_user_by_username(db, username)
     if not deleted_user:
         raise HTTPException(
