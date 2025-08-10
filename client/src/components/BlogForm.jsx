@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleSubmit } from '../hooks/Submit'; 
+import useBlogFormState from '../hooks/BlogValidation';
 
 import {
   Card,
@@ -17,6 +17,11 @@ import { Button } from '@/components/ui/button';
 
 const BlogForm = () => {
   const navigate = useNavigate();
+  const { formData, setFormData, loading, error, success, handleSubmit } = useBlogFormState();
+
+  const onChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -26,16 +31,20 @@ const BlogForm = () => {
           <CardDescription>Get your ideas up and running...</CardDescription>
         </CardHeader>
 
-        
         <form onSubmit={(e) => handleSubmit(e, navigate)}>
           <CardContent className="space-y-6">
+            {error && <p className="text-red-600">{error}</p>}
+            {success && <p className="text-green-600">{success}</p>}
+
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
-                name="title" 
+                name="title"
                 type="text"
                 placeholder="Give a title for your blog"
+                value={formData.title}
+                onChange={onChange}
               />
             </div>
 
@@ -43,9 +52,11 @@ const BlogForm = () => {
               <Label htmlFor="subtitle">Subtitle</Label>
               <Input
                 id="subtitle"
-                name="subtitle" 
+                name="subtitle"
                 type="text"
                 placeholder="Give a suitable subtitle"
+                value={formData.subtitle}
+                onChange={onChange}
               />
             </div>
 
@@ -53,14 +64,16 @@ const BlogForm = () => {
               <Label htmlFor="content">Content</Label>
               <Textarea
                 id="content"
-                name="content" 
+                name="content"
                 placeholder="Write your blog here..."
                 className="min-h-[180px]"
+                value={formData.content}
+                onChange={onChange}
               />
             </div>
-
-            <Button type="submit" className="w-full mt-4">
-              Submit
+            
+            <Button type="submit" className="w-full mt-4" disabled={loading}>
+              {loading ? 'Saving...' : 'Submit'}
             </Button>
           </CardContent>
         </form>

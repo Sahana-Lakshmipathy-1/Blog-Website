@@ -1,26 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import blogs from '../data/blog.json'; // Static blogs
 
 const BlogDetails = () => {
-  const { id } = useParams(); // ID from URL (string)
+  const { id } = useParams();
 
-  // Fetch stored blogs from localStorage
-  const storedBlogs = JSON.parse(localStorage.getItem('blogs')) || [];
+  const [blog, setBlog] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Merge static stored blogs to render
-  const allBlogs = [...blogs, ...storedBlogs];
+  useEffect(() => {
+    const fetchBlog = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          setError('You must be logged in to view this blog.');
+          setLoading(false);
+          return;
+        }
 
-  // Find blog by ID (ensure string comparison) from the array to render
-  const blog = allBlogs.find((b) => String(b.id) === id);
+        const response = await fetch(`http://127.0.0.1:2500/api/blogs/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-  if (!blog) {
-    return (
-      <div className="text-center text-red-500 mt-10 text-lg font-medium">
-        Blog not found
-      </div>
-    );
-  }
+        if (!response.ok) {
+          if (response.status === 404) {
+            setError('Blog not found.');
+          } else {
+            setError('Failed to load blog.');
+          }
+          setLoading(false);
+          return;
+        }
+
+        const data = await response.json();
+        setBlog(data);
+      } catch (err) {
+        setError('Network error. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlog();
+  }, [id]);
+
+  if (loading) return <div className="text-center mt-10">Loading...</div>;
+
+  if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
 
   return (
     <div className="max-w-3xl mx-auto p-6">

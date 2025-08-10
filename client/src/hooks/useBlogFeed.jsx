@@ -1,70 +1,49 @@
 import { useEffect, useState } from 'react';
-import blogs from '../data/blog.json';
-import useInfiniteScroll from './ScrollHooks';
 
 const useBlogFeed = () => {
-
-  const [allBlogs, setAllBlogs] = useState([]);
   const [visibleBlogs, setVisibleBlogs] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadCount] = useState(6);
+  const [loading, setLoading] = useState(true); // Start loading true
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // 1. Fetch blogs stored in localStorage (i.e., submitted by user)
-    const storedBlogs = JSON.parse(localStorage.getItem('blogs')) || [];
+    const fetchBlogs = async () => {
+      setLoading(true);
+      setError(null);
 
-    // 2. Combine static blogs (from blog.json) and stored blogs
-    const combined = [...blogs, ...storedBlogs];
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) throw new Error('Authentication token missing');
 
-    // 3. Sort combined blogs based on a priority:
-    //    - "Trending" gets top priority → 0
-    //    - Remaining normal blogs → 1
-    //    - "New Article" → lowest priority → 2
-    combined.sort((a, b) => {
-      const priority = (blog) =>
-        blog.badge === 'Trending' ? 0 : blog.badge === 'New Article' ? 2 : 1;
+        const response = await fetch('http://127.0.0.1:2500/api/blogs/', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      return priority(a) - priority(b); // Lower number = higher priority
-    });
+        if (!response.ok) {
+          throw new Error(`Failed to fetch blogs: ${response.statusText}`);
+        }
 
-    // 4. Save the sorted list in state
-    setAllBlogs(combined);
+        const data = await response.json();
 
-    // 5. Show the initial slice of blogs (e.g., first 6 blogs)
-    setVisibleBlogs(combined.slice(0, loadCount));
-  }, [loadCount]); // Dependency: will only re-run if loadCount changes
+        // Optional: simulate delay for UX
+        setTimeout(() => {
+          setVisibleBlogs(data);
+          setLoading(false);
+        }, 2000); // 1-second fake loading delay
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
 
-  // 2️ Function: loadMoreBlogs
-  // Loads the next set of blogs when user scrolls
-  const loadMoreBlogs = () => {
-    // 1. Calculate next batch of blogs to show (slice range)
-    const nextBlogs = allBlogs.slice(
-      visibleBlogs.length,
-      visibleBlogs.length + loadCount
-    );
+    fetchBlogs();
+  }, []);
 
-    // 2. Add new blogs to the existing visible list
-    setVisibleBlogs((prev) => [...prev, ...nextBlogs]);
-
-    // 3. If we've reached or exceeded total blog count, disable further loading
-    if (visibleBlogs.length + nextBlogs.length >= allBlogs.length) {
-      setHasMore(false); // Prevent further scroll-based loading
-    }
-  };
-
- 
-  // 3️ Hook: useInfiniteScroll
-  // Automatically call `loadMoreBlogs()` when user scrolls near bottom
-  useInfiniteScroll(
-    loadMoreBlogs, // The function to run when scrolled down
-    hasMore,       // Only run if there are more blogs to load
-    [visibleBlogs] // Re-register scroll logic if visibleBlogs changes
-  );
-
-  // 4️ Return the stateful data to components
   return {
-    visibleBlogs, // The list of currently visible blogs
-    hasMore       // Whether more blogs are available to scroll-load
+    visibleBlogs,
+    loading,
+    error,
   };
 };
 

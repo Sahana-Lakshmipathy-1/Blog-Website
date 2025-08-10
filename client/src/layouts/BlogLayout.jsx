@@ -1,11 +1,33 @@
-// 📁 src/pages/BlogLayout.jsx
-
 import React from 'react';
 import BlogCard from '@/components/BlogCard';
 import useBlogFeed from '@/hooks/useBlogFeed';
 
 const BlogLayout = () => {
-  const { visibleBlogs, hasMore } = useBlogFeed(); // 👈 Custom hook
+  const { visibleBlogs, loading, error } = useBlogFeed();
+
+  if (loading) {
+    return (
+      <p className="text-center mt-10 text-gray-500 animate-pulse">
+        Loading blogs...
+      </p>
+    );
+  }
+
+  if (error) {
+    return (
+      <p className="text-center mt-10 text-red-500 font-semibold">
+        Error loading blogs: {error}
+      </p>
+    );
+  }
+
+  if (visibleBlogs.length === 0) {
+    return (
+      <p className="text-center mt-10 text-gray-700">
+        No blogs found.
+      </p>
+    );
+  }
 
   return (
     <main>
@@ -16,12 +38,6 @@ const BlogLayout = () => {
           <BlogCard key={blog.id} blog={blog} />
         ))}
       </div>
-
-      {hasMore && (
-        <p className="text-center mt-6 text-gray-500 animate-pulse">
-          Loading more blogs...
-        </p>
-      )}
     </main>
   );
 };

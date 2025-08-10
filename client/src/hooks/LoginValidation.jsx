@@ -1,5 +1,21 @@
 import { useState } from 'react';
 
+const parseJwt = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+};
+
 export const useLoginValidation = () => {
   const [loginData, setLoginData] = useState({ username: '', password: '' });
   const [loginErrors, setLoginErrors] = useState({});
@@ -50,6 +66,15 @@ export const useLoginValidation = () => {
 
       if (data.access_token) {
         localStorage.setItem('authToken', data.access_token);
+
+        // Decode username from JWT token and store it
+        const payload = parseJwt(data.access_token);
+        if (payload && payload.sub) {
+          localStorage.setItem('username', payload.sub);
+          console.log('Username stored in localStorage:', payload.sub);
+        } else {
+          console.warn('Username (sub) not found in token payload');
+        }
       } else {
         return { success: false, errors: { general: 'Invalid token received' } };
       }
