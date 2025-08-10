@@ -9,6 +9,7 @@ import Newsletter from '@/pages/Newsletter';
 import Home from '@/pages/Home';
 import Support from '@/pages/Support';
 import About from '@/pages/About';
+import Login from '@/pages/Login'
 
 const AppRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const AppRoutes = () => {
       <Route path='/support' element={<Support/>}/>
       <Route path='about' element={<About/>}/>
       <Route path='/newsletter' element={<Newsletter/>}/>
+      <Route path='/login' element={<Login isLoggedIn={false} />}/>
     </Routes>
   );
 };
