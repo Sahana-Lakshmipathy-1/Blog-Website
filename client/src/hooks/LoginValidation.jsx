@@ -4,6 +4,7 @@ export const useLoginValidation = () => {
   const [loginData, setLoginData] = useState({ username: '', password: '' });
   const [loginErrors, setLoginErrors] = useState({});
 
+  // Validate loginData and update errors state
   const validateLogin = () => {
     const errors = {};
     if (!loginData.username.trim()) {
@@ -19,11 +20,16 @@ export const useLoginValidation = () => {
     }
 
     setLoginErrors(errors);
-    return Object.keys(errors).length === 0;
+    return errors;  // return fresh errors for immediate use
   };
 
   const login = async () => {
-    if (!validateLogin()) return { success: false, errors: loginErrors };
+    console.log('login() called with:', loginData);
+    const errors = validateLogin();
+    if (Object.keys(errors).length > 0) {
+      console.log('Validation failed:', errors);
+      return { success: false, errors };
+    }
 
     try {
       const response = await fetch('http://127.0.0.1:2500/api/auth/token', {
@@ -31,16 +37,26 @@ export const useLoginValidation = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
       });
+      console.log('Response status:', response.status);
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
+        console.log('Error response body:', errorData);
         return { success: false, errors: { general: errorData.detail || 'Login failed' } };
       }
 
       const data = await response.json();
-      if (data.token) localStorage.setItem('authToken', data.token);
+      console.log('Success response data:', data);
+
+      if (data.access_token) {
+        localStorage.setItem('authToken', data.access_token);
+      } else {
+        return { success: false, errors: { general: 'Invalid token received' } };
+      }
+
       return { success: true, data };
     } catch (error) {
+      console.error('Network or unexpected error:', error);
       return { success: false, errors: { general: 'Network error, please try again later.' } };
     }
   };
@@ -49,6 +65,7 @@ export const useLoginValidation = () => {
     loginData,
     setLoginData,
     loginErrors,
+    setLoginErrors,    // <-- Make sure to return this!
     validateLogin,
     login,
   };
@@ -93,11 +110,16 @@ export const useSignupValidation = () => {
     }
 
     setSignupErrors(errors);
-    return Object.keys(errors).length === 0;
+    return errors;  // Return fresh errors for immediate use
   };
 
   const signup = async () => {
-    if (!validateSignup()) return { success: false, errors: signupErrors };
+    console.log('signup() called with:', signupData);
+    const errors = validateSignup();
+    if (Object.keys(errors).length > 0) {
+      console.log('Validation failed:', errors);
+      return { success: false, errors };
+    }
 
     try {
       const response = await fetch('http://127.0.0.1:2500/api/auth/signup', {
@@ -106,14 +128,20 @@ export const useSignupValidation = () => {
         body: JSON.stringify(signupData),
       });
 
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
+        console.log('Error response body:', errorData);
         return { success: false, errors: { general: errorData.detail || 'Signup failed' } };
       }
 
       const data = await response.json();
+      console.log('Success response data:', data);
+
       return { success: true, data };
     } catch (error) {
+      console.error('Network or unexpected error:', error);
       return { success: false, errors: { general: 'Network error, please try again later.' } };
     }
   };
@@ -122,6 +150,7 @@ export const useSignupValidation = () => {
     signupData,
     setSignupData,
     signupErrors,
+    setSignupErrors,   // <-- Return setter here as well
     validateSignup,
     signup,
   };

@@ -1,6 +1,7 @@
 // src/routes/AppRoutes.jsx
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+
 import BlogForm from '../components/BlogForm';
 import BlogLayout from '@/layouts/BlogLayout';
 import UserDropDown from '@/components/UserDropDown';
@@ -9,21 +10,109 @@ import Newsletter from '@/pages/Newsletter';
 import Home from '@/pages/Home';
 import Support from '@/pages/Support';
 import About from '@/pages/About';
-import Login from '@/pages/Login'
+import Login from '@/pages/Login';
+
+// Simple auth check: returns true if token exists
+const isAuthenticated = () => !!localStorage.getItem('authToken');
+
+const RequireAuth = ({ children }) => {
+  return isAuthenticated() ? children : <Navigate to="/login" replace />;
+};
+
+const RedirectIfAuth = ({ children }) => {
+  return isAuthenticated() ? <Navigate to="/" replace /> : children;
+};
 
 const AppRoutes = () => {
   return (
-    // defining the our routes
     <Routes>
-      <Route path='/' element={<Home/>}/>
-      <Route path='/blog' element={<BlogLayout/>} />
-      <Route path='/create' element={<BlogForm />} />
-      <Route path='/user' element={<UserDropDown/>}/>
-      <Route path="/blog/:id" element={<BlogDetails />} />
-      <Route path='/support' element={<Support/>}/>
-      <Route path='about' element={<About/>}/>
-      <Route path='/newsletter' element={<Newsletter/>}/>
-      <Route path='/login' element={<Login isLoggedIn={false} />}/>
+      {/* Public route: Login */}
+      <Route
+        path="/login"
+        element={
+          <RedirectIfAuth>
+            <Login />
+          </RedirectIfAuth>
+        }
+      />
+
+      {/* Protected routes */}
+      <Route
+        path="/"
+        element={
+          <RequireAuth>
+            <Home />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/blog"
+        element={
+          <RequireAuth>
+            <BlogLayout />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/create"
+        element={
+          <RequireAuth>
+            <BlogForm />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/user"
+        element={
+          <RequireAuth>
+            <UserDropDown />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/blog/:id"
+        element={
+          <RequireAuth>
+            <BlogDetails />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/support"
+        element={
+          <RequireAuth>
+            <Support />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/about"
+        element={
+          <RequireAuth>
+            <About />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/newsletter"
+        element={
+          <RequireAuth>
+            <Newsletter />
+          </RequireAuth>
+        }
+      />
+
+      {/* Catch-all redirect unknown paths to home or login */}
+      <Route
+        path="*"
+        element={
+          isAuthenticated() ? (
+            <Navigate to="/" replace />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
     </Routes>
   );
 };

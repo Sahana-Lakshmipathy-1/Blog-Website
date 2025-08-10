@@ -16,11 +16,11 @@ class LoginRequest(BaseModel):
     username: str
     password: str
 
-# Signup endpoint with proper rate limiting
+# Signup endpoint with rate limiting
 @router.post("/signup", status_code=status.HTTP_201_CREATED)
-@limiter.limit("3/minute")  # Apply limiter decorator directly
+@limiter.limit("3/minute")
 async def signup(
-    request: Request,              # Must include 'request' for limiter to work
+    request: Request,          # Needed for limiter to work
     user: SignupRequest,
     db: Session = Depends(get_db),
 ):
@@ -31,11 +31,11 @@ async def signup(
         raise HTTPException(status_code=500, detail="Error creating user")
     return {"message": "User created successfully"}
 
-# Login endpoint with proper rate limiting
+# Login endpoint with rate limiting
 @router.post("/token", response_model=Token)
 @limiter.limit("10/minute")
 async def login_for_access_token(
-    request: Request,              # Include 'request' here as well
+    request: Request,         # Needed for limiter to work
     login_data: LoginRequest,
     db: Session = Depends(get_db),
 ):
@@ -47,4 +47,6 @@ async def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token = create_access_token(data={"sub": user.username})
+
+   
     return {"access_token": access_token, "token_type": "bearer"}
