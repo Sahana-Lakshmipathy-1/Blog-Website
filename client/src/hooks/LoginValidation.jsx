@@ -22,11 +22,35 @@ export const useLoginValidation = () => {
     return Object.keys(errors).length === 0;
   };
 
+  const login = async () => {
+    if (!validateLogin()) return { success: false, errors: loginErrors };
+
+    try {
+      const response = await fetch('http://127.0.0.1:2500/api/auth/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, errors: { general: errorData.detail || 'Login failed' } };
+      }
+
+      const data = await response.json();
+      if (data.token) localStorage.setItem('authToken', data.token);
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, errors: { general: 'Network error, please try again later.' } };
+    }
+  };
+
   return {
     loginData,
     setLoginData,
     loginErrors,
     validateLogin,
+    login,
   };
 };
 
@@ -72,10 +96,33 @@ export const useSignupValidation = () => {
     return Object.keys(errors).length === 0;
   };
 
+  const signup = async () => {
+    if (!validateSignup()) return { success: false, errors: signupErrors };
+
+    try {
+      const response = await fetch('http://127.0.0.1:2500/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(signupData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, errors: { general: errorData.detail || 'Signup failed' } };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, errors: { general: 'Network error, please try again later.' } };
+    }
+  };
+
   return {
     signupData,
     setSignupData,
     signupErrors,
     validateSignup,
+    signup,
   };
 };

@@ -21,12 +21,12 @@ const AuthCard = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
 
-  // Use custom hooks for login/signup state and validation
+  // Use custom hooks for login/signup state, validation & API calls
   const {
     loginData,
     setLoginData,
     loginErrors,
-    validateLogin,
+    login,
     setLoginErrors,
   } = useLoginValidation();
 
@@ -34,7 +34,7 @@ const AuthCard = () => {
     signupData,
     setSignupData,
     signupErrors,
-    validateSignup,
+    signup,
     setSignupErrors,
   } = useSignupValidation();
 
@@ -45,19 +45,27 @@ const AuthCard = () => {
     setSignupErrors({});
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    if (validateLogin()) {
-      alert(`Logging in with username: ${loginData.username}`);
-      // TODO: add login API call or logic here
+    const result = await login();
+    if (!result.success) {
+      if (result.errors.general) alert(result.errors.general);
+      // Errors already set in state via hook
+    } else {
+      alert('Login successful!');
+      // Example: navigate or update UI
+      // navigate('/dashboard');
     }
   };
 
-  const handleSignupSubmit = (e) => {
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
-    if (validateSignup()) {
-      alert(`Signing up user: ${signupData.username}`);
-      // TODO: add signup API call or logic here
+    const result = await signup();
+    if (!result.success) {
+      if (result.errors.general) alert(result.errors.general);
+    } else {
+      alert('Signup successful!');
+      setIsLogin(true);
     }
   };
 

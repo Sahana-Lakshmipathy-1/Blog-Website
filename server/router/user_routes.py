@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from typing import List
+from limiter import limiter  # your global limiter instance
+
 from models.user import UserCreate, UserResponse, UserUpdate
 from crud.useroperations import (
     create_user,
@@ -11,22 +13,14 @@ from crud.useroperations import (
 )
 from db.session import get_db
 
-# SlowAPI imports
-from slowapi import Limiter
-from slowapi.util import get_remote_address
-
-limiter = Limiter(key_func=get_remote_address)
 router = APIRouter()
 
-# -------------------------
-# Create User
-# -------------------------
 @router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-@limiter.limit("5/minute")  # prevent abuse of user creation
-def create_user_endpoint(
-    request: Request,
+@limiter.limit("5/minute")
+async def create_user_endpoint(
+    request: Request,           # required for limiter
     user: UserCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     if get_user_by_username(db, user.username):
         raise HTTPException(
@@ -46,15 +40,12 @@ def create_user_endpoint(
         )
     return created_user
 
-# -------------------------
-# Read User
-# -------------------------
 @router.get("/{username}", response_model=UserResponse)
-@limiter.limit("30/minute")  # read-heavy, so higher limit
-def read_user(
-    request: Request,
+@limiter.limit("30/minute")
+async def read_user(
+    request: Request,           # required for limiter
     username: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     user = get_user_by_username(db, username)
     if not user:
@@ -64,16 +55,13 @@ def read_user(
         )
     return user
 
-# -------------------------
-# Update User
-# -------------------------
 @router.put("/{username}", response_model=UserResponse)
-@limiter.limit("10/minute")  # prevent excessive updates
-def update_user_endpoint(
-    request: Request,
+@limiter.limit("10/minute")
+async def update_user_endpoint(
+    request: Request,           # required for limiter
     username: str,
     user_update: UserUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     updated_user = update_user_by_username(db, username, user_update)
     if not updated_user:
@@ -83,15 +71,12 @@ def update_user_endpoint(
         )
     return updated_user
 
-# -------------------------
-# Delete User
-# -------------------------
 @router.delete("/{username}", response_model=UserResponse)
-@limiter.limit("5/minute")  # restrict delete attempts
-def delete_user_endpoint(
-    request: Request,
+@limiter.limit("5/minute")
+async def delete_user_endpoint(
+    request: Request,           # required for limiter
     username: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     deleted_user = delete_user_by_username(db, username)
     if not deleted_user:
