@@ -8,13 +8,13 @@ import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const App = () => {
   return ( 
-    <div >
+    <div className="flex flex-col min-h-screen">
       <NavBar />
-      <div className="p-4">
+      <main className="flex-grow p-4">
         <Analytics />
         <SpeedInsights />
         <AppRoutes />
-      </div>
+      </main>
       <Footer/>
     </div>
   );

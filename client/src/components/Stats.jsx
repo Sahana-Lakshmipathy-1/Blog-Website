@@ -11,7 +11,7 @@ const Stats = () => {
   return (
     <section className="bg-white text-black px-6 py-10 border-t border-gray-200">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6 border-b border-gray-300 pb-2">Our Testimonial</h2>
+        <h2 className="text-2xl font-bold mb-6 border-b border-gray-300 pb-2">Overall Statistics</h2>
         
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
           {stats.map((stat, index) => (
