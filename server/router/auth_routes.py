@@ -7,7 +7,7 @@ from crud.useroperations import create_user, get_user_by_username
 from utils.security import verify_password, create_access_token
 from models.auth import SignupRequest
 from models.token import Token
-from limiter import limiter  # Your global limiter instance
+from limiter import limiter  
 
 router = APIRouter()
 

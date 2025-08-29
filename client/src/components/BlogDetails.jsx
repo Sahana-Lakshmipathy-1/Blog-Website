@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -57,7 +61,9 @@ const BlogDetails = () => {
       <h1 className="text-4xl font-bold mb-2">{blog.title}</h1>
       <h2 className="text-xl text-gray-600 mb-4">{blog.subtitle}</h2>
       <p className="text-sm text-gray-400 mb-6">
-        Published on {new Date(blog.createdAt).toLocaleDateString()}
+        Published on {dayjs(blog.created_at).format("DD MMM YYYY, h:mm A")}
+        {" • "}
+        {dayjs(blog.created_at).fromNow()}
       </p>
       <p className="text-lg leading-relaxed whitespace-pre-line">{blog.content}</p>
     </div>
