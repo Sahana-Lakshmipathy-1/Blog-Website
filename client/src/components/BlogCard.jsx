@@ -54,6 +54,7 @@ const BlogCard = ({ blog }) => {
             {" • "}
             {dayjs(blog.created_at).fromNow()}
           </p>
+          <p className="text-sm text-gray-400 mb-6">Published By {blog.username}</p>
           <Button asChild className="w-fit px-4 py-2 text-sm">
             <Link to={`/blog/${blog.id}`}>Read More</Link>
           </Button>
