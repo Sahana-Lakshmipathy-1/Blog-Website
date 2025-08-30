@@ -1,110 +1,78 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:2500/api";
 
 const useBlogFormState = () => {
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
-    title: '',
-    subtitle: '',
-    content: '',
+    title: "",
+    subtitle: "",
+    content: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-  // Validate required fields and return errors object
-  const validate = () => {
-    const errors = {};
-    if (!formData.title.trim()) {
-      errors.title = 'Title is required';
-    }
-    if (!formData.content.trim()) {
-      errors.content = 'Content is required';
-    }
-    console.log('Validation errors:', errors);
-    return errors;
+  const resetForm = () => {
+    setFormData({ title: "", subtitle: "", content: "" });
   };
 
-  // Main submit handler
-  const handleSubmit = async (e, navigate, setBlogData) => {
-    e.preventDefault();
-    console.log('Form submission started');
-
-    setError('');
-    setSuccess('');
-
-    const errors = validate();
-    if (Object.keys(errors).length > 0) {
-      const errorMessages = Object.values(errors).join(', ');
-      console.log('Validation failed:', errorMessages);
-      setError(errorMessages);
-      return;
-    }
-
+  const handleSubmit = async (type, id = null) => {
     setLoading(true);
+    setError(null);
+    setSuccess(null);
 
     try {
-      const token = localStorage.getItem('authToken');
-      console.log('Token retrieved from localStorage:', token);
+      const token = localStorage.getItem("authToken");
+      if (!token) throw new Error("Not authenticated");
 
-      if (!token) {
-        setError('Authentication token is missing. Please login.');
-        setLoading(false);
-        console.warn('No token found, aborting request');
-        return;
+      if (!["create", "update"].includes(type)) {
+        throw new Error(`Invalid submit type: ${type}`);
       }
 
-      const username = localStorage.getItem('username');
-      if (!username) {
-        setError('Username not found. Please login again.');
-        setLoading(false);
-        return;
+      let url = `${API_BASE_URL}/blogs`;
+      let method = "POST";
+
+      if (type === "update" && id) {
+        url = `${API_BASE_URL}/blogs/${id}/edit`;
+        method = "PUT";
       }
 
-      // Prepare payload with username and badge
-      const payload = {
-        ...formData,
-        username,
-        badge: 'New_Article',
-      };
-
-      console.log('Submitting payload:', payload);
-
-      const response = await fetch('http://127.0.0.1:2500/api/blogs/', {
-        method: 'POST',
+      const response = await fetch(url, {
+        method,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formData),
       });
 
-      console.log('Response status:', response.status);
+      const result = await response.json();
 
       if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        console.error('Error response body:', errData);
-        setError(errData.detail || 'Failed to submit blog.');
-      } else {
-        const data = await response.json();
-        console.log('Blog post created successfully:', data);
-        setSuccess('Blog submitted successfully!');
-        setFormData({ title: '', subtitle: '', content: '' });
-
-        // Pass full saved blog data to the parent (or wherever) for preview/render
-        if (setBlogData) {
-          setBlogData(data);
-        }
-
-        if (navigate && data.id) {
-          console.log('Navigating to blog preview with id:', data.id);
-          navigate(`/blog/${data.id}`);
-        }
+        throw new Error(result.message || `Failed to ${type} blog`);
       }
+
+      setSuccess(
+        `Blog ${type === "update" ? "updated" : "created"} successfully!`
+      );
+      
+      // Delay navigation to give user time to review the success message
+      setTimeout(() => {
+        resetForm();
+        if (type === "create") {
+          navigate("/blogs");
+        } else if (type === "update" && id) {
+          navigate(`/blogs/${id}`);
+        }
+      }, 2000); // 2-second delay
+
     } catch (err) {
-      console.error('Network or unexpected error:', err);
-      setError('Network error, please try again.');
+      setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
-      console.log('Form submission ended');
     }
   };
 

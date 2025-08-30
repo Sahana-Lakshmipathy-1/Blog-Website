@@ -1,4 +1,3 @@
-// src/routes/AppRoutes.jsx
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
@@ -57,6 +56,7 @@ const AppRoutes = () => {
         path="/create"
         element={
           <RequireAuth>
+            {/* The form is for creating, so no isEdit prop is needed */}
             <BlogForm />
           </RequireAuth>
         }
@@ -101,6 +101,16 @@ const AppRoutes = () => {
           </RequireAuth>
         }
       />
+      <Route
+        path="/blogs/:id/edit" // Use a clearer path for editing
+        element={
+          <RequireAuth>
+            {/* ✅ Pass the isEdit prop to tell the component to fetch data */}
+            <BlogForm isEdit={true} />
+          </RequireAuth>
+        }
+      />
+      
 
       {/* Catch-all redirect unknown paths to home or login */}
       <Route

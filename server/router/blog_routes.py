@@ -86,7 +86,7 @@ async def read_blogs_by_username(
     return get_blogs_by_username(db, username)
 
 
-@router.put("/{blog_id}", response_model=BlogResponse)
+@router.put("/{blog_id}/edit", response_model=BlogResponse)
 @limiter.limit("10/minute")
 async def update_blog_endpoint(
     request: Request,
