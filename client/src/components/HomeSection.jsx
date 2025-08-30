@@ -13,7 +13,7 @@ const HomeSection = () => {
         </p>
         <div className="flex justify-center gap-4">
           <Link
-            to="/blog"
+            to="/blogs"
             className="bg-black text-white px-6 py-3 rounded-md hover:bg-gray-900 transition"
           >
             Browse Blogs

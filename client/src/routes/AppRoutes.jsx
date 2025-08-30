@@ -1,18 +1,17 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import BlogForm from '../components/BlogForm';
-import BlogLayout from '@/layouts/BlogLayout';
-import UserDropDown from '@/components/UserDropDown';
-import BlogDetails from '@/components/BlogDetails';
-import Newsletter from '@/pages/Newsletter';
-import Home from '@/pages/Home';
-import Support from '@/pages/Support';
-import About from '@/pages/About';
-import Login from '@/pages/Login';
+import BlogForm from "@/components/BlogForm";
+import BlogLayout from "@/layouts/BlogLayout";
+import BlogDetails from "@/components/BlogDetails";
+import Newsletter from "@/pages/Newsletter";
+import Home from "@/pages/Home";
+import Support from "@/pages/Support";
+import About from "@/pages/About";
+import Login from "@/pages/Login";
 
 // Simple auth check: returns true if token exists
-const isAuthenticated = () => !!localStorage.getItem('authToken');
+const isAuthenticated = () => !!localStorage.getItem("authToken");
 
 const RequireAuth = ({ children }) => {
   return isAuthenticated() ? children : <Navigate to="/login" replace />;
@@ -44,39 +43,58 @@ const AppRoutes = () => {
           </RequireAuth>
         }
       />
+
+      {/* All blogs */}
       <Route
-        path="/blog"
+        path="/blogs"
         element={
           <RequireAuth>
             <BlogLayout />
           </RequireAuth>
         }
       />
+
+      {/* User-specific blogs */}
       <Route
-        path="/create"
+        path="/userblogs"
         element={
           <RequireAuth>
-            {/* The form is for creating, so no isEdit prop is needed */}
-            <BlogForm />
+            <BlogLayout />
           </RequireAuth>
         }
       />
+
+      {/* Blog details */}
       <Route
-        path="/user"
-        element={
-          <RequireAuth>
-            <UserDropDown />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="/blog/:id"
+        path="/blogs/:id"
         element={
           <RequireAuth>
             <BlogDetails />
           </RequireAuth>
         }
       />
+
+      {/* Create new blog */}
+      <Route
+        path="/blogs/create"
+        element={
+          <RequireAuth>
+            <BlogForm />
+          </RequireAuth>
+        }
+      />
+
+      {/* Edit blog */}
+      <Route
+        path="/blogs/:id/edit"
+        element={
+          <RequireAuth>
+            <BlogForm isEdit={true} />
+          </RequireAuth>
+        }
+      />
+
+      {/* Other pages */}
       <Route
         path="/support"
         element={
@@ -101,27 +119,11 @@ const AppRoutes = () => {
           </RequireAuth>
         }
       />
-      <Route
-        path="/blogs/:id/edit" // Use a clearer path for editing
-        element={
-          <RequireAuth>
-            {/* ✅ Pass the isEdit prop to tell the component to fetch data */}
-            <BlogForm isEdit={true} />
-          </RequireAuth>
-        }
-      />
-      
 
-      {/* Catch-all redirect unknown paths to home or login */}
+      {/* Catch-all redirect */}
       <Route
         path="*"
-        element={
-          isAuthenticated() ? (
-            <Navigate to="/" replace />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
+        element={<Navigate to={isAuthenticated() ? "/" : "/login"} replace />}
       />
     </Routes>
   );

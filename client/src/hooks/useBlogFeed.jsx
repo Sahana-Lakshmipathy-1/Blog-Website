@@ -1,9 +1,14 @@
-import { useEffect, useState } from 'react';
+// useBlogFeed.jsx
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
+const API_BASE_URL = "http://127.0.0.1:2500/api";
 
 const useBlogFeed = () => {
-  const [visibleBlogs, setVisibleBlogs] = useState([]);
-  const [loading, setLoading] = useState(true); // Start loading true
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -11,40 +16,55 @@ const useBlogFeed = () => {
       setError(null);
 
       try {
-        const token = localStorage.getItem('authToken');
-        if (!token) throw new Error('Authentication token missing');
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          setError("Authentication token missing. Please log in.");
+          setBlogs([]); // clear blogs when not authenticated
+          setLoading(false);
+          return;
+        }
 
-        const response = await fetch('http://127.0.0.1:2500/api/blogs/', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        let url = `${API_BASE_URL}/blogs/`;
+        if (location.pathname.startsWith("/userblogs")) {
+          const username = localStorage.getItem("username");
+          if (!username) {
+            throw new Error("Username missing in local storage.");
+          }
+          url = `${API_BASE_URL}/blogs/user/${username}`;
+        }
+
+        const response = await fetch(url, {
+          headers: { Authorization: `Bearer ${token}` },
         });
 
+        // handle redirect responses explicitly
+        if (response.redirected) {
+          console.warn("API redirected to:", response.url);
+          throw new Error("Server redirected the request (likely due to auth).");
+        }
+
         if (!response.ok) {
-          throw new Error(`Failed to fetch blogs: ${response.statusText}`);
+          const text = await response.text(); // capture response body for debugging
+          throw new Error(
+            `Failed to fetch blogs. Status: ${response.status}, Body: ${text}`
+          );
         }
 
         const data = await response.json();
-
-        // Optional: simulate delay for UX
-        setTimeout(() => {
-          setVisibleBlogs(data);
-          setLoading(false);
-        }, 2000); // 1-second fake loading delay
+        setBlogs(Array.isArray(data) ? data : []);
       } catch (err) {
-        setError(err.message);
+        console.error("Error fetching blogs:", err);
+        setError(err.message || "Failed to load blogs. Please try again later.");
+        setBlogs([]);
+      } finally {
         setLoading(false);
       }
     };
 
     fetchBlogs();
-  }, []);
+  }, [location.pathname]);
 
-  return {
-    visibleBlogs,
-    loading,
-    error,
-  };
+  return { blogs, loading, error };
 };
 
 export default useBlogFeed;

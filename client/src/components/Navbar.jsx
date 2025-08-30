@@ -19,7 +19,7 @@ const NavBar = () => {
           About
         </Link>
         <Link
-          to="/blog"
+          to="/blogs"
           className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200"
         >
           Blogs

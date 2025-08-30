@@ -3,7 +3,8 @@ import BlogCard from '@/components/BlogCard';
 import useBlogFeed from '@/hooks/useBlogFeed';
 
 const BlogLayout = () => {
-  const { visibleBlogs, loading, error } = useBlogFeed();
+  // Correctly destructure 'blogs' instead of 'visibleBlogs'
+  const { blogs, loading, error } = useBlogFeed();
 
   if (loading) {
     return (
@@ -21,7 +22,8 @@ const BlogLayout = () => {
     );
   }
 
-  if (visibleBlogs.length === 0) {
+  // Use 'blogs' array to check its length and map over it
+  if (blogs.length === 0) {
     return (
       <p className="text-center mt-10 text-gray-700">
         No blogs found.
@@ -34,7 +36,7 @@ const BlogLayout = () => {
       <h1 className="text-3xl font-bold mb-6">Blog Feed</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {visibleBlogs.map((blog) => (
+        {blogs.map((blog) => (
           <BlogCard key={blog.id} blog={blog} />
         ))}
       </div>

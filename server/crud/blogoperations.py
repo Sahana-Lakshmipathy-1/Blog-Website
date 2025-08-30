@@ -25,14 +25,14 @@ def create_blog(db: Session, blog: BlogCreate):
 def get_blog_by_title(db: Session, title: str):
     return db.query(Blogs).filter(Blogs.title == title, Blogs.delete_flag == False).first()
 
+def get_blogs_by_username(db: Session, username: str):
+    return db.query(Blogs).filter(Blogs.username == username, Blogs.delete_flag == False).order_by(Blogs.created_at.desc()).all()
+
 def get_blog_by_uuid(db: Session, blog_id: UUID):
     return db.query(Blogs).filter(Blogs.id == blog_id, Blogs.delete_flag == False).first()
 
 def get_all_blogs(db: Session):
     return db.query(Blogs).filter(Blogs.delete_flag == False).order_by(Blogs.created_at.desc()).all()
-
-def get_blogs_by_username(db: Session, username: str):
-    return db.query(Blogs).filter(Blogs.username == username, Blogs.delete_flag == False).all()
 
 def update_blog_by_id(db: Session, blog_id: UUID, blog: BlogUpdate):
     try:

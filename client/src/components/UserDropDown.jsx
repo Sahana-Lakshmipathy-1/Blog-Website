@@ -21,6 +21,7 @@ const UserDropDown = () => {
     navigate('/login');
   };
 
+
   return (
     <div className="text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200">
       <DropdownMenu>
@@ -29,7 +30,7 @@ const UserDropDown = () => {
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>My Comments</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleClick('/userblogs')}>My Blogs</DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleClick('/support')}>Support</DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleClick('/newsletter')}>Subscription</DropdownMenuItem>
           <DropdownMenuSeparator />
