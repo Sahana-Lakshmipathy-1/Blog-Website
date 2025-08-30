@@ -3,6 +3,7 @@ from sqlalchemy import Column, String
 from sqlalchemy.dialects.postgresql import UUID
 from db.Base import Base
 
+# user table structure
 class User(Base):
     __tablename__ = "users"
 

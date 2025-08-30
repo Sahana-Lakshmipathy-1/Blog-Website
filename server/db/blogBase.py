@@ -4,6 +4,8 @@ from db.Base import Base
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
+
+# blog table structure
 class Blogs(Base):
     __tablename__ = "blogs"
 

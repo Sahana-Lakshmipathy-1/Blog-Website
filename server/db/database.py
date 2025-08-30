@@ -8,16 +8,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Get database URL from environment, fallback to your current hardcoded string
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:2205@localhost:5432/blog_application"
-)
+DATABASE_URL = os.getenv("database_url")
+
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is not set.")
 
 # Create SQLAlchemy engine with encoding and echo disabled for production readiness
 engine = create_engine(
     DATABASE_URL,
     echo=False,  # Set to True to enable SQL logging for debugging
-    connect_args={"options": "-c timezone=utc"}  # optional: set UTC timezone
+    connect_args={"options": "-c timezone=utc"}  
 )
 
 # Create all tables based on Base metadata
