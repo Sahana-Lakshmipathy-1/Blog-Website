@@ -9,16 +9,19 @@ import Home from "@/pages/Home";
 import Support from "@/pages/Support";
 import About from "@/pages/About";
 import Login from "@/pages/Login";
+import BlogWizard from "@/components/BlogWizard";
 
-// Simple auth check: returns true if token exists
+// Auth check: returns true if token exists
 const isAuthenticated = () => !!localStorage.getItem("authToken");
 
+// Wrapper for protected routes
 const RequireAuth = ({ children }) => {
-  return isAuthenticated() ? children : <Navigate to="/login" replace />;
+  return isAuthenticated() ? <>{children}</> : <Navigate to="/login" replace />;
 };
 
+// Wrapper for public routes (redirect if logged in)
 const RedirectIfAuth = ({ children }) => {
-  return isAuthenticated() ? <Navigate to="/" replace /> : children;
+  return isAuthenticated() ? <Navigate to="/" replace /> : <>{children}</>;
 };
 
 const AppRoutes = () => {
@@ -34,7 +37,7 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Protected routes */}
+      {/* Protected Home route */}
       <Route
         path="/"
         element={
@@ -44,7 +47,23 @@ const AppRoutes = () => {
         }
       />
 
-      {/* All blogs */}
+      {/* Blogs */}
+      <Route
+        path="/blogs/:id/edit"
+        element={
+          <RequireAuth>
+            <BlogForm isEdit />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/blogs/:id"
+        element={
+          <RequireAuth>
+            <BlogDetails />
+          </RequireAuth>
+        }
+      />
       <Route
         path="/blogs"
         element={
@@ -64,19 +83,9 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Blog details */}
-      <Route
-        path="/blogs/:id"
-        element={
-          <RequireAuth>
-            <BlogDetails />
-          </RequireAuth>
-        }
-      />
-
       {/* Create new blog */}
       <Route
-        path="/blogs/create"
+        path="/create"
         element={
           <RequireAuth>
             <BlogForm />
@@ -84,12 +93,12 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Edit blog */}
+      {/* Blog Wizard / Stepwise Generator */}
       <Route
-        path="/blogs/:id/edit"
+        path="/generate"
         element={
           <RequireAuth>
-            <BlogForm isEdit={true} />
+            <BlogWizard />
           </RequireAuth>
         }
       />
@@ -120,7 +129,7 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Catch-all redirect */}
+      {/* Catch-all route */}
       <Route
         path="*"
         element={<Navigate to={isAuthenticated() ? "/" : "/login"} replace />}

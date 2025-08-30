@@ -56,7 +56,7 @@ const BlogCard = ({ blog }) => {
           </p>
           <p className="text-sm text-gray-400 mb-6">Published By {blog.username}</p>
           <Button asChild className="w-fit px-4 py-2 text-sm">
-            <Link to={`/blog/${blog.id}`}>Read More</Link>
+            <Link to={`/blogs/${blog.id}`}>Read More</Link>
           </Button>
         </CardFooter>
       </Card>
