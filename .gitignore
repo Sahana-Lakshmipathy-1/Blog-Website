@@ -1,2 +1,55 @@
 # Local Netlify folder
 .netlify
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.sqlite3
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Environment & config files
+*.env
+.env.*
+*.ini
+*.toml
+*.yaml
+*.yml
+secrets.json
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Migrations
+alembic/versions/*.py
+
+# Node / Frontend junk (if using React frontend)
+node_modules/
+build/
+dist/
+
+# Others
+*.egg-info/
+
