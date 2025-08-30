@@ -68,10 +68,13 @@ const useBlogFormState = () => {
         `Blog ${type === "update" ? "updated" : "created"} successfully!`
       );
       
+    // Get the blog ID from response (backend should return it)
+    const blogId = type === "create" ? result.id : id;
+
       setTimeout(() => {
         resetForm();
         if (type === "create") {
-          navigate("/blogs");
+          navigate(`/blogs/${blogId}`);
         } else if (type === "update" && id) {
           navigate(`/blogs/${id}`);
         }
