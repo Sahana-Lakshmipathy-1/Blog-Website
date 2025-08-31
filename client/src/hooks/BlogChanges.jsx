@@ -12,7 +12,7 @@ export const useBlogChanges = (id) => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
-        console.error("No auth token found. You must be logged in to delete a blog.");
+        // console.error("No auth token found. You must be logged in to delete a blog.");
         return;
       }
 
@@ -28,11 +28,11 @@ export const useBlogChanges = (id) => {
         throw new Error(error.message || "Failed to delete blog.");
       }
 
-      console.log("Blog deleted successfully!");
+      // console.log("Blog deleted successfully!");
       navigate("/blogs");
     } catch (err) {
-      console.error(err);
-      console.error(err.message);
+      // console.error(err);
+      // console.error(err.message);
     }
   };
 
@@ -44,7 +44,7 @@ export const useBlogChanges = (id) => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
-        console.error("No auth token found. You must be logged in to update a blog.");
+        // console.error("No auth token found. You must be logged in to update a blog.");
         return;
       }
 
@@ -62,11 +62,11 @@ export const useBlogChanges = (id) => {
         throw new Error(error.message || "Failed to update blog.");
       }
 
-      console.log("Blog updated successfully!");
+      // console.log("Blog updated successfully!");
       navigate(`/blogs/${id}`);
     } catch (err) {
-      console.error(err);
-      console.error(err.message);
+      // console.error(err);
+      // console.error(err.message);
     }
   };
 

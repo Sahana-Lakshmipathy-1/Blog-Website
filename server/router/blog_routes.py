@@ -44,12 +44,35 @@ async def get_current_username(token: str = Depends(oauth2_scheme)) -> str:
 
 
 # -------------------------
-# Create a new blog (with optional image)
+# Create a new blog via JSON only (no file upload)
+# -------------------------
+@router.post("/json", response_model=BlogResponse, status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")
+async def create_blog_json_endpoint(
+    request: Request,
+    blog: BlogCreate,  # expects JSON body matching schema
+    username: str = Depends(get_current_username),
+    db: Session = Depends(get_db),
+):
+    # enforce JWT username over client-sent username
+    blog.username = username  
+
+    created_blog = create_blog(db, blog)
+    if not created_blog:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to create blog",
+        )
+    return created_blog
+
+
+# -------------------------
+# Create a new blog (with optional image via multipart form)
 # -------------------------
 @router.post("/", response_model=BlogResponse, status_code=status.HTTP_201_CREATED)
 @limiter.limit("5/minute")
 async def create_blog_endpoint(
-    request: Request,   
+    request: Request,
     title: str = Form(...),
     subtitle: Optional[str] = Form(""),
     content: str = Form(...),

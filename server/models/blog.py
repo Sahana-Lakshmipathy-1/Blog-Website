@@ -1,42 +1,45 @@
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 from typing import Optional
-from datetime import date, datetime
 from uuid import UUID
+from datetime import datetime
 
-# Base model shared between create and response
+# -------------------------
+# Shared fields
+# -------------------------
 class BlogBase(BaseModel):
     title: str
-    subtitle: Optional[str] = None
     content: str
-    badge: Optional[str] = None
-    img_url: Optional[str] = None  # Optional Cloudinary URL
-    created_at: Optional[datetime] = None
+    subtitle: Optional[str] = None
+    badge: Optional[str] = "New Article"
+    img_url: Optional[str] = None  # always a string or None
 
 
-# Model used when creating a new blog
+# -------------------------
+# Create schema
+# -------------------------
 class BlogCreate(BlogBase):
-    username: str  # Foreign key reference to users.username
+    username: str  # required on create
 
-# Model used for updating a blog
+
+# -------------------------
+# Update schema
+# -------------------------
 class BlogUpdate(BaseModel):
     title: Optional[str] = None
-    subtitle: Optional[str] = None
     content: Optional[str] = None
+    subtitle: Optional[str] = None
     badge: Optional[str] = None
-    img_url: Optional[HttpUrl] = None
-    delete_flag: Optional[bool] = None  # Soft delete
+    img_url: Optional[str] = None
 
-    model_config = {
-        "from_attributes": True
-    }
 
-# Model used for returning blog data in responses
+# -------------------------
+# Response schema
+# -------------------------
 class BlogResponse(BlogBase):
-    id: UUID
+    id: UUID                  # ✅ match DB UUID primary key
     username: str
-    created_at: datetime
-    delete_flag: bool
+    created_at: Optional[datetime] = None  # optional, include if DB tracks timestamps
+    updated_at: Optional[datetime] = None
 
-    model_config = {
-        "from_attributes": True
-    }
+    class Config:
+        orm_mode = True

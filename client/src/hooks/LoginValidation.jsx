@@ -40,10 +40,10 @@ export const useLoginValidation = () => {
   };
 
   const login = async () => {
-    console.log('login() called with:', loginData);
+    // console.log('login() called with:', loginData);
     const errors = validateLogin();
     if (Object.keys(errors).length > 0) {
-      console.log('Validation failed:', errors);
+      // console.log('Validation failed:', errors);
       return { success: false, errors };
     }
 
@@ -53,16 +53,16 @@ export const useLoginValidation = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
       });
-      console.log('Response status:', response.status);
+      // console.log('Response status:', response.status);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.log('Error response body:', errorData);
+        // console.log('Error response body:', errorData);
         return { success: false, errors: { general: errorData.detail || 'Login failed' } };
       }
 
       const data = await response.json();
-      console.log('Success response data:', data);
+      // console.log('Success response data:', data);
 
       if (data.access_token) {
         localStorage.setItem('authToken', data.access_token);
@@ -71,9 +71,9 @@ export const useLoginValidation = () => {
         const payload = parseJwt(data.access_token);
         if (payload && payload.sub) {
           localStorage.setItem('username', payload.sub);
-          console.log('Username stored in localStorage:', payload.sub);
+          // console.log('Username stored in localStorage:', payload.sub);
         } else {
-          console.warn('Username (sub) not found in token payload');
+          // console.warn('Username (sub) not found in token payload');
         }
       } else {
         return { success: false, errors: { general: 'Invalid token received' } };
@@ -81,7 +81,7 @@ export const useLoginValidation = () => {
 
       return { success: true, data };
     } catch (error) {
-      console.error('Network or unexpected error:', error);
+      // console.error('Network or unexpected error:', error);
       return { success: false, errors: { general: 'Network error, please try again later.' } };
     }
   };
@@ -139,10 +139,10 @@ export const useSignupValidation = () => {
   };
 
   const signup = async () => {
-    console.log('signup() called with:', signupData);
+    // console.log('signup() called with:', signupData);
     const errors = validateSignup();
     if (Object.keys(errors).length > 0) {
-      console.log('Validation failed:', errors);
+      // console.log('Validation failed:', errors);
       return { success: false, errors };
     }
 
@@ -153,20 +153,20 @@ export const useSignupValidation = () => {
         body: JSON.stringify(signupData),
       });
 
-      console.log('Response status:', response.status);
+      // console.log('Response status:', response.status);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.log('Error response body:', errorData);
+        // console.log('Error response body:', errorData);
         return { success: false, errors: { general: errorData.detail || 'Signup failed' } };
       }
 
       const data = await response.json();
-      console.log('Success response data:', data);
+      // console.log('Success response data:', data);
 
       return { success: true, data };
     } catch (error) {
-      console.error('Network or unexpected error:', error);
+      // console.error('Network or unexpected error:', error);
       return { success: false, errors: { general: 'Network error, please try again later.' } };
     }
   };

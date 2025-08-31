@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
+
 const BlogForm = ({ isEdit = false }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -76,6 +77,10 @@ const BlogForm = ({ isEdit = false }) => {
     : isEdit
       ? "Update Blog"
       : "Submit";
+    
+  const handleClick = (path) => {
+    navigate(path);
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -173,6 +178,13 @@ const BlogForm = ({ isEdit = false }) => {
               {buttonText}
             </Button>
           </form>
+          <Button
+              type="button"
+              className="w-full py-3 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-transform duration-200"
+              onClick={() => handleClick('/generate')}
+            >
+              Generate with AI
+            </Button>
         </CardContent>
 
         <CardFooter className="text-sm text-gray-500 mt-4">

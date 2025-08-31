@@ -2,9 +2,9 @@ import React from 'react'
 import CountUp from 'react-countup';
 
 const stats = [
-  { label: 'Users', value: 1000 },
-  { label: 'Blogs', value: 100 },
-  { label: 'Topics', value: 10 },
+  { label: 'Blogs', value: 10000 },
+  { label: 'Topics', value: 1000 },
+  { label: 'Users', value: 100 },
 ];
 
 const Stats = () => {

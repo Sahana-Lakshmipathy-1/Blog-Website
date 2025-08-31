@@ -29,8 +29,8 @@ const useBlogFormState = () => {
   };
 
   const handleSubmit = async (type, id = null) => {
-    console.log("===== SUBMIT LOG =====");
-    console.log("Submit type:", type, "ID:", id);
+    // console.log("===== SUBMIT LOG =====");
+    // console.log("Submit type:", type, "ID:", id);
 
     setLoading(true);
     setError(null);
@@ -60,10 +60,10 @@ const useBlogFormState = () => {
       if (formData.img_file) payload.append("file", formData.img_file);
       if (type === "create") payload.append("created_at", new Date().toISOString());
 
-      console.log("Method:", method);
-      console.log("URL:", url);
-      console.log("Payload FormData:", formData);
-      console.log("=======================");
+      // console.log("Method:", method);
+      // console.log("URL:", url);
+      // console.log("Payload FormData:", formData);
+      // console.log("=======================");
 
       const response = await fetch(url, {
         method,
@@ -75,10 +75,10 @@ const useBlogFormState = () => {
 
       const result = await response.json();
 
-      console.log("===== RESPONSE LOG =====");
-      console.log("Status:", response.status);
-      console.log("Body:", result);
-      console.log("=======================");
+      // console.log("===== RESPONSE LOG =====");
+      // console.log("Status:", response.status);
+      // console.log("Body:", result);
+      // console.log("=======================");
 
       if (!response.ok) {
         throw new Error(result.detail || `Failed to ${type} blog`);
@@ -93,7 +93,7 @@ const useBlogFormState = () => {
       }, 1500);
 
     } catch (err) {
-      console.error("Submit error:", err);
+      // console.error("Submit error:", err);
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
