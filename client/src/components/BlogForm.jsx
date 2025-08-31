@@ -44,6 +44,7 @@ const BlogForm = ({ isEdit = false }) => {
           subtitle: data?.subtitle || "",
           content: data?.content || "",
           badge: data?.badge || "New Article",
+          img_file: null,          // new file state
           img_url: data?.img_url || "",
         });
       } catch (err) {
@@ -55,8 +56,12 @@ const BlogForm = ({ isEdit = false }) => {
   }, [isEdit, id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, files } = e.target;
+    if (name === "img_file" && files.length > 0) {
+      setFormData((prev) => ({ ...prev, img_file: files[0] }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const onSubmit = (e) => {
@@ -71,8 +76,6 @@ const BlogForm = ({ isEdit = false }) => {
     : isEdit
       ? "Update Blog"
       : "Submit";
-
-  const handleClick = (path) => navigate(path);
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -106,7 +109,6 @@ const BlogForm = ({ isEdit = false }) => {
                 value={formData.title}
                 onChange={handleChange}
                 required
-                className="border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-xl shadow-sm"
               />
             </div>
 
@@ -122,7 +124,6 @@ const BlogForm = ({ isEdit = false }) => {
                 placeholder="Add a brief subtitle"
                 value={formData.subtitle}
                 onChange={handleChange}
-                className="border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-xl shadow-sm"
               />
             </div>
 
@@ -138,42 +139,38 @@ const BlogForm = ({ isEdit = false }) => {
                 value={formData.content}
                 onChange={handleChange}
                 required
-                className="min-h-[200px] border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm resize-none"
               />
             </div>
 
-            {/* Optional Image URL */}
+            {/* Image Upload */}
             <div className="space-y-2">
-              <Label htmlFor="img_url" className="text-gray-700 font-semibold">
-                Cover Image URL (optional)
+              <Label htmlFor="img_file" className="text-gray-700 font-semibold">
+                Cover Image (optional)
               </Label>
               <Input
-                id="img_url"
-                name="img_url"
-                type="url"
-                placeholder="Paste image URL here"
-                value={formData.img_url}
+                id="img_file"
+                name="img_file"
+                type="file"
+                accept="image/*"
                 onChange={handleChange}
-                className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-xl shadow-sm"
               />
+              {formData.img_file && (
+                <p className="text-sm text-gray-500">
+                  Selected file: {formData.img_file.name}
+                </p>
+              )}
+              {!formData.img_file && formData.img_url && (
+                <img
+                  src={formData.img_url}
+                  alt="Existing cover"
+                  className="mt-2 max-h-48 rounded-lg"
+                />
+              )}
             </div>
 
             {/* Submit Button */}
-            <Button
-              type="submit"
-              className="w-full mt-6 py-3 bg-black text-white font-semibold rounded-xl shadow-lg hover:bg-gray-800 hover:scale-105 transition-transform duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full mt-6 py-3" disabled={loading}>
               {buttonText}
-            </Button>
-
-            {/* AI Generation Button */}
-            <Button
-              type="button"
-              className="w-full py-3 bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-transform duration-200"
-              onClick={() => handleClick("/generate")}
-            >
-              Generate with AI
             </Button>
           </form>
         </CardContent>

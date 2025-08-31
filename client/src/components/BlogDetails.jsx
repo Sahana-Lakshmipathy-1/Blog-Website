@@ -60,26 +60,41 @@ const BlogDetails = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
+      {/* ✅ Blog Title */}
       <div className="text-4xl font-bold mb-2 prose">
         <ReactMarkdown>{blog.title || ""}</ReactMarkdown>
       </div>
 
+      {/* ✅ Blog Subtitle */}
       <div className="text-xl text-gray-600 mb-4 prose">
         <ReactMarkdown>{blog.subtitle || ""}</ReactMarkdown>
       </div>
 
-      <p className="text-sm text-gray-400 mb-6">
+      {/* ✅ Blog Image (only if exists) */}
+      {blog.img_url && (
+        <div className="mb-6">
+          <img
+            src={blog.img_url}
+            alt={blog.title}
+            className="w-full h-auto rounded-lg shadow-md"
+          />
+        </div>
+      )}
+
+      {/* ✅ Blog Meta Info */}
+      <p className="text-sm text-gray-400 mb-2">
         Published on {dayjs(blog.created_at).format("DD MMM YYYY, h:mm A")} •{" "}
         {dayjs(blog.created_at).fromNow()}
       </p>
 
       <p className="text-sm text-gray-400 mb-6">Published by {blog.username}</p>
 
+      {/* ✅ Blog Content */}
       <div className="prose prose-lg leading-relaxed text-gray-800">
         <ReactMarkdown>{blog.content || ""}</ReactMarkdown>
       </div>
 
-      {/* Action Buttons */}
+      {/* ✅ Action Buttons */}
       <div className="mt-6 flex gap-4">
         {isOwner && (
           <>

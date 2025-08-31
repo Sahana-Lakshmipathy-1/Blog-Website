@@ -11,7 +11,7 @@ const useBlogFormState = () => {
     subtitle: "",
     content: "",
     badge: "New Article",
-    img_url: "",
+    img_file: null, // for file upload
   });
 
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ const useBlogFormState = () => {
       subtitle: "",
       content: "",
       badge: "New Article",
-      img_url: "",
+      img_file: null,
     });
   };
 
@@ -50,29 +50,27 @@ const useBlogFormState = () => {
         : `${API_BASE_URL}/blogs`;
       const method = type === "update" ? "PUT" : "POST";
 
-      // Build payload exactly matching backend Pydantic model
-      const payload = {
-        title: formData.title.trim(),
-        subtitle: formData.subtitle?.trim() || "",
-        content: formData.content.trim(),
-        badge: formData.badge?.trim() || "New Article",
-        img_url: formData.img_url?.trim() || null,
-        username: username,
-        ...(type === "create" ? { created_at: new Date().toISOString() } : {}), // send created_at only when creating
-      };
+      // Create FormData for file upload
+      const payload = new FormData();
+      payload.append("title", formData.title.trim());
+      payload.append("subtitle", formData.subtitle?.trim() || "");
+      payload.append("content", formData.content.trim());
+      payload.append("badge", formData.badge?.trim() || "New Article");
+      payload.append("username", username);
+      if (formData.img_file) payload.append("file", formData.img_file);
+      if (type === "create") payload.append("created_at", new Date().toISOString());
 
       console.log("Method:", method);
       console.log("URL:", url);
-      console.log("Payload:", payload);
+      console.log("Payload FormData:", formData);
       console.log("=======================");
 
       const response = await fetch(url, {
         method,
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, // don't set Content-Type manually
         },
-        body: JSON.stringify(payload),
+        body: payload,
       });
 
       const result = await response.json();

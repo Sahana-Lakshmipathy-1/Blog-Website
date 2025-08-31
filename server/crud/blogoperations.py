@@ -4,28 +4,50 @@ from db.blogBase import Blogs  # Your SQLAlchemy model
 from models.blog import BlogCreate, BlogUpdate
 from uuid import uuid4, UUID
 from datetime import datetime
+from fastapi import UploadFile
+import cloudinary.uploader
+from fastapi import HTTPException
 
-def create_blog(db: Session, blog: BlogCreate):
-    db_blog = Blogs(
-        id=uuid4(),
-        title=blog.title,
-        subtitle=blog.subtitle,
-        content=blog.content,
-        username=blog.username,
-        badge=blog.badge or "New Article",
-        img_url=blog.img_url,
-        delete_flag=False,
-        created_at=datetime.now()
-    )
+
+def create_blog(db: Session, blog: BlogCreate, file: UploadFile = None):
+    img_url = blog.img_url  # default if passed in payload
+
+    # Try Cloudinary upload if a file is provided
+    if file:
+        try:
+            upload_result = cloudinary.uploader.upload(
+                file.file,
+                folder="blogs"
+            )
+            img_url = upload_result.get("secure_url")
+        except Exception as e:
+            print("Cloudinary upload failed:", e)
+            img_url = None
+
     try:
+        # Proper blog object with all required fields
+        db_blog = Blogs(
+            id=uuid4(),
+            title=blog.title,
+            subtitle=blog.subtitle,
+            content=blog.content,
+            username=blog.username,
+            badge=blog.badge or "New Article",
+            img_url=img_url,
+            delete_flag=False,
+            created_at=datetime.now()
+        )
         db.add(db_blog)
         db.commit()
         db.refresh(db_blog)
         return db_blog
-    except SQLAlchemyError as e:
+
+    except Exception as e:
+        import traceback
+        print("🔥 ERROR while creating blog:", str(e))
+        traceback.print_exc()
         db.rollback()
-        print(f"Error creating blog: {e}")
-        return None
+        raise HTTPException(status_code=500, detail=f"DB Error: {str(e)}")
 
 def get_blog_by_title(db: Session, title: str):
     return db.query(Blogs).filter(
