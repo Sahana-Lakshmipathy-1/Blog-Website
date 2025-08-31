@@ -12,9 +12,9 @@ import { Link } from 'react-router-dom'
 import { Badge } from "@/components/ui/badge"
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import ReactMarkdown from "react-markdown";
 
 dayjs.extend(relativeTime);
-
 
 const BlogCard = ({ blog }) => {
   const badgeColor = blog.badge === 'Trending'
@@ -39,12 +39,18 @@ const BlogCard = ({ blog }) => {
           )}
 
           <CardHeader>
-            <CardTitle className="text-lg mt-4.5">{blog.title}</CardTitle>
-            <CardDescription className="mt-1 ">{blog.subtitle}</CardDescription>
+            <CardTitle className="text-lg mt-4.5">
+              <ReactMarkdown>{blog.title}</ReactMarkdown>
+            </CardTitle>
+            <CardDescription className="mt-1">
+              <ReactMarkdown>{blog.subtitle}</ReactMarkdown>
+            </CardDescription>
           </CardHeader>
 
           <CardContent className="mt-2 ml-0.5">
-            <p>{blog.content.slice(0, 100)}...</p>
+            <ReactMarkdown>
+              {blog.content.slice(0, 100) + "..."}
+            </ReactMarkdown>
           </CardContent>
         </div>
 

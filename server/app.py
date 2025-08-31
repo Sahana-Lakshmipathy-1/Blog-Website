@@ -48,7 +48,7 @@ def get_db():
 app.include_router(user_router, prefix="/api/users", tags=["users"])
 app.include_router(blog_router, prefix="/api/blogs", tags=["blogs"])
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
-app.include_router(response_router, prefix="/generate", tags=["generate"])
+app.include_router(response_router, prefix="/api/generate", tags=["generate"])
 
 def custom_openapi():
     if app.openapi_schema:
