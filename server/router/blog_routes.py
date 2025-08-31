@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from uuid import UUID
 
-from limiter import limiter  # Your global limiter instance
+from limiter import limiter # Your global limiter instance
 
 from models.blog import BlogCreate, BlogResponse, BlogUpdate
 from db.session import get_db
@@ -17,7 +17,8 @@ from crud.blogoperations import (
     delete_blog_by_id,
 )
 
-from utils.security import decode_access_token
+# Correct import for the updated security function
+from utils.security import decode_jwt_token
 from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter()
@@ -25,7 +26,8 @@ router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
 
 async def get_current_username(token: str = Depends(oauth2_scheme)) -> str:
-    payload = decode_access_token(token)
+    # Use the new function name to decode the token
+    payload = decode_jwt_token(token)
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
     username = payload.get("sub")
@@ -39,7 +41,7 @@ async def get_current_username(token: str = Depends(oauth2_scheme)) -> str:
 async def create_blog_endpoint(
     request: Request,
     blog: BlogCreate,
-    username: str = Depends(get_current_username),  # Inject current username from token
+    username: str = Depends(get_current_username), # Inject current username from token
     db: Session = Depends(get_db),
 ):
     # Override username to prevent spoofing

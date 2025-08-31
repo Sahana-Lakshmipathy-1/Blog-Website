@@ -16,6 +16,9 @@ const BlogDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Get current user info from localStorage
+  const currentUser = localStorage.getItem("username");
+
   useEffect(() => {
     const fetchBlog = async () => {
       setLoading(true);
@@ -53,14 +56,14 @@ const BlogDetails = () => {
   if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
   if (!blog) return <div className="text-center mt-10">No blog found.</div>;
 
+  const isOwner = currentUser === blog.username; // Only owner can modify
+
   return (
     <div className="max-w-3xl mx-auto p-6">
-      {/* Title as Markdown */}
       <div className="text-4xl font-bold mb-2 prose">
         <ReactMarkdown>{blog.title || ""}</ReactMarkdown>
       </div>
 
-      {/* Subtitle as Markdown */}
       <div className="text-xl text-gray-600 mb-4 prose">
         <ReactMarkdown>{blog.subtitle || ""}</ReactMarkdown>
       </div>
@@ -72,26 +75,29 @@ const BlogDetails = () => {
 
       <p className="text-sm text-gray-400 mb-6">Published by {blog.username}</p>
 
-      {/* Content as Markdown */}
       <div className="prose prose-lg leading-relaxed text-gray-800">
         <ReactMarkdown>{blog.content || ""}</ReactMarkdown>
       </div>
 
       {/* Action Buttons */}
       <div className="mt-6 flex gap-4">
-        <button
-          onClick={() => navigate(`/blogs/${id}/edit`)}
-          className="bg-black text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-        >
-          Update
-        </button>
-        <button
-          onClick={handleDelete}
-          disabled={loading}
-          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 disabled:opacity-50"
-        >
-          Delete
-        </button>
+        {isOwner && (
+          <>
+            <button
+              onClick={() => navigate(`/blogs/${id}/edit`)}
+              className="bg-black text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            >
+              Update
+            </button>
+            <button
+              onClick={handleDelete}
+              disabled={loading}
+              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 disabled:opacity-50"
+            >
+              Delete
+            </button>
+          </>
+        )}
         <button
           onClick={handleBack}
           className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500"

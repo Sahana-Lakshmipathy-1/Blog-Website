@@ -1,15 +1,18 @@
-from fastapi import Request
+from fastapi import Request, HTTPException, status
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
-from utils.security import decode_access_token
+from typing import Set, Optional
+
+# Correct import for the updated security file
+from utils.security import decode_jwt_token
 
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
-    def __init__(self, app, public_paths=None):
+    def __init__(self, app, public_paths: Optional[Set[str]] = None):
         super().__init__(app)
-        # Ensure public_paths is a set for efficient lookups
-        self.public_paths = set(public_paths or [])
-
+        # Using a set provides efficient O(1) lookups
+        self.public_paths = public_paths or set()
+        
     async def dispatch(self, request: Request, call_next):
         # Allow all OPTIONS requests to pass through (CORS preflight)
         if request.method == "OPTIONS":
@@ -17,31 +20,30 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
 
         path = request.url.path
 
-        # Bypass authentication for public paths (exact or prefix match)
-        # We need to check if the path starts with any of the public path prefixes.
+        # Bypass authentication for paths explicitly marked as public
         if any(path.startswith(p) for p in self.public_paths):
             return await call_next(request)
 
-        # Check for Authorization header on all other requests
+        # Get the token from the Authorization header
         auth_header = request.headers.get("Authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
-            return JSONResponse(
-                status_code=401,
-                content={"detail": "Missing or invalid Authorization header"}
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Missing or invalid Authorization header",
             )
 
         token = auth_header.split(" ", 1)[1]
 
-        # Validate JWT token
-        payload = decode_access_token(token)
+        # Validate the JWT token using the correct function
+        payload = decode_jwt_token(token)
         if not payload:
-            return JSONResponse(
-                status_code=401,
-                content={"detail": "Invalid or expired token"}
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid or expired token",
             )
 
-        # Attach user info to request state for use in endpoints
+        # Attach the user payload to the request state
         request.state.user = payload
 
-        # Process the request
+        # Continue with the request
         return await call_next(request)
