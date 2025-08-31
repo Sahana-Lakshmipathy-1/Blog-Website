@@ -59,7 +59,7 @@ const BlogCard = ({ blog }) => {
             </CardTitle>
             {blog.subtitle && (
               <CardDescription className="mt-1">
-                <ReactMarkdown>{blog.subtitle}</ReactMarkdown>
+                <ReactMarkdown>{blog.subtitle?.slice(0, 100) + "..."}</ReactMarkdown>
               </CardDescription>
             )}
           </CardHeader>
