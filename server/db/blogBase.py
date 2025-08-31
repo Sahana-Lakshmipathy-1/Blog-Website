@@ -4,7 +4,6 @@ from db.Base import Base
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
-
 # blog table structure
 class Blogs(Base):
     __tablename__ = "blogs"
@@ -13,10 +12,12 @@ class Blogs(Base):
     title = Column(String(255), nullable=False)
     subtitle = Column(String(255), nullable=True)
     content = Column(Text, nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+    created_at = Column(TIMESTAMP(timezone=True))
     badge = Column(String(50), nullable=True, default="New Article", server_default=text("'New Article'"))
     
-    # <-- Add this line here
     username = Column(String(50), ForeignKey("users.username"), nullable=False)
     
     delete_flag = Column(Boolean, default=False)
+
+    # Add the img_url column (optional)
+    img_url = Column(String(500), nullable=True)
