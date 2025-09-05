@@ -1,6 +1,6 @@
-// useBlogFeed.jsx
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const API_BASE_URL = "http://127.0.0.1:2500/api";
 
@@ -16,7 +16,10 @@ const useBlogFeed = () => {
       setError(null);
 
       try {
-        const token = localStorage.getItem("authToken");
+        // ✅ Read token + username from cookies
+        const token = Cookies.get("accessToken");
+        const username = Cookies.get("username");
+
         if (!token) {
           setError("Authentication token missing. Please log in.");
           setBlogs([]); // clear blogs when not authenticated
@@ -26,9 +29,8 @@ const useBlogFeed = () => {
 
         let url = `${API_BASE_URL}/blogs/`;
         if (location.pathname.startsWith("/userblogs")) {
-          const username = localStorage.getItem("username");
           if (!username) {
-            throw new Error("Username missing in local storage.");
+            throw new Error("Username missing in cookies.");
           }
           url = `${API_BASE_URL}/blogs/user/${username}`;
         }
@@ -37,14 +39,13 @@ const useBlogFeed = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // handle redirect responses explicitly
         if (response.redirected) {
           console.warn("API redirected to:", response.url);
           throw new Error("Server redirected the request (likely due to auth).");
         }
 
         if (!response.ok) {
-          const text = await response.text(); // capture response body for debugging
+          const text = await response.text();
           throw new Error(
             `Failed to fetch blogs. Status: ${response.status}, Body: ${text}`
           );

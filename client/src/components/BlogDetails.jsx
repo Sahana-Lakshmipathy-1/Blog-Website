@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useBlogChanges } from "../hooks/BlogChanges";
 import ReactMarkdown from "react-markdown";
+import Cookies from "js-cookie";
+import { useBlogChanges } from "../hooks/BlogChanges";
 
 dayjs.extend(relativeTime);
 
@@ -16,16 +17,16 @@ const BlogDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Get current user info from localStorage
-  const currentUser = localStorage.getItem("username");
+  // ✅ Read from cookies instead of localStorage
+  const currentUser = Cookies.get("username");
+  const token = Cookies.get("accessToken");
 
   useEffect(() => {
     const fetchBlog = async () => {
       setLoading(true);
       setError("");
-      try {
-        const token = localStorage.getItem("authToken");
 
+      try {
         const response = await fetch(`http://127.0.0.1:2500/api/blogs/${id}`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
@@ -33,6 +34,11 @@ const BlogDetails = () => {
         if (!response.ok) {
           if (response.status === 404) {
             setError("Blog not found.");
+          } else if (response.status === 401) {
+            setError("Unauthorized. Please log in again.");
+            Cookies.remove("accessToken");
+            Cookies.remove("username");
+            navigate("/login");
           } else {
             setError("Failed to load blog.");
           }
@@ -43,6 +49,7 @@ const BlogDetails = () => {
         const data = await response.json();
         setBlog(data);
       } catch (err) {
+        console.error("Fetch blog failed:", err);
         setError("Network error. Please try again.");
       } finally {
         setLoading(false);
@@ -50,27 +57,27 @@ const BlogDetails = () => {
     };
 
     fetchBlog();
-  }, [id]);
+  }, [id, token, navigate]);
 
   if (loading) return <div className="text-center mt-10">Loading...</div>;
   if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
   if (!blog) return <div className="text-center mt-10">No blog found.</div>;
 
-  const isOwner = currentUser === blog.username; // Only owner can modify
+  const isOwner = currentUser === blog.username; // ✅ Only owner can modify
 
   return (
     <div className="max-w-3xl mx-auto p-6">
       {/* ✅ Blog Title */}
-      <div className="text-4xl font-bold mb-2 prose">
+      <h1 className="text-4xl font-bold mb-2 prose">
         <ReactMarkdown>{blog.title || ""}</ReactMarkdown>
-      </div>
+      </h1>
 
       {/* ✅ Blog Subtitle */}
-      <div className="text-xl text-gray-600 mb-4 prose">
+      <h2 className="text-xl text-gray-600 mb-4 prose">
         <ReactMarkdown>{blog.subtitle || ""}</ReactMarkdown>
-      </div>
+      </h2>
 
-      {/* ✅ Blog Image (only if exists) */}
+      {/* ✅ Blog Image */}
       {blog.img_url && (
         <div className="mb-6">
           <img
@@ -81,12 +88,11 @@ const BlogDetails = () => {
         </div>
       )}
 
-      {/* ✅ Blog Meta Info */}
+      {/* ✅ Blog Meta */}
       <p className="text-sm text-gray-400 mb-2">
         Published on {dayjs(blog.created_at).format("DD MMM YYYY, h:mm A")} •{" "}
         {dayjs(blog.created_at).fromNow()}
       </p>
-
       <p className="text-sm text-gray-400 mb-6">Published by {blog.username}</p>
 
       {/* ✅ Blog Content */}
