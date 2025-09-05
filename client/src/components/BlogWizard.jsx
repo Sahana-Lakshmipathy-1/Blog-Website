@@ -78,7 +78,7 @@ const BlogWizard = ({ username }) => {
               className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg shadow-md"
               onClick={handlePublish}
             >
-              🚀 Publish Blog
+               Publish Blog
             </Button>
           </CardContent>
         </Card>

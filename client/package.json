@@ -25,6 +25,7 @@
     "cloudinary": "^2.7.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.15",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.536.0",
     "react": "^19.1.0",
     "react-countup": "^6.5.3",

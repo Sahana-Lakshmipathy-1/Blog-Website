@@ -28,7 +28,7 @@ const BlogCard = ({ blog }) => {
     <div className="grid-3col-3 relative m-1">
       <Card className="h-full flex flex-col justify-between relative overflow-hidden">
         
-        {/* ✅ Image section (use img_url instead of image) */}
+        {/*  Image section (use img_url instead of image) */}
         {blog.img_url && (
           <div className="w-full h-48 overflow-hidden">
             <img
@@ -40,7 +40,7 @@ const BlogCard = ({ blog }) => {
         )}
 
         <div className="p-2 flex-1">
-          {/* ✅ Badge */}
+          {/*  Badge */}
           {blog.badge && (
             <div className="absolute top-4 right-4">
               <Badge
@@ -52,7 +52,7 @@ const BlogCard = ({ blog }) => {
             </div>
           )}
 
-          {/* ✅ Title + Subtitle */}
+          {/*  Title + Subtitle */}
           <CardHeader>
             <CardTitle className="text-lg mt-2">
               <ReactMarkdown>{blog.title}</ReactMarkdown>
@@ -64,7 +64,7 @@ const BlogCard = ({ blog }) => {
             )}
           </CardHeader>
 
-          {/* ✅ Short Content */}
+          {/*  Short Content */}
           <CardContent className="mt-2 ml-0.5">
             <ReactMarkdown>
               {blog.content?.slice(0, 100) + "..."}
@@ -72,7 +72,7 @@ const BlogCard = ({ blog }) => {
           </CardContent>
         </div>
 
-        {/* ✅ Footer */}
+        {/* Footer */}
         <CardFooter className="flex flex-col items-start gap-2 px-6 pb-4">
           <p className="text-sm text-gray-400">
             Published on {dayjs(blog.created_at).format("DD MMM YYYY, h:mm A")}

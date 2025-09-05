@@ -10,11 +10,9 @@ from utils.security import decode_jwt_token
 class JWTAuthMiddleware(BaseHTTPMiddleware):
     def __init__(self, app, public_paths: Optional[Set[str]] = None):
         super().__init__(app)
-        # Using a set provides efficient O(1) lookups
         self.public_paths = public_paths or set()
         
     async def dispatch(self, request: Request, call_next):
-        # Allow all OPTIONS requests to pass through (CORS preflight)
         if request.method == "OPTIONS":
             return await call_next(request)
 

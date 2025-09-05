@@ -1,88 +1,142 @@
-import { useState } from 'react';
+import { useState } from "react";
 
+/* ------------------ Cookie Helpers ------------------ */
+const setCookie = (name, value, minutes) => {
+  const expiryDate = new Date(Date.now() + minutes * 60 * 1000);
+
+  // GMT string (required for actual cookie)
+  const expires = expiryDate.toUTCString();
+
+  // For logs → IST version
+  const expiresIST = expiryDate.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+  });
+
+  const cookieString = `${name}=${encodeURIComponent(
+    value
+  )}; expires=${expires}; path=/; SameSite=Strict`;
+  document.cookie = cookieString;
+
+  console.log(`[Cookie] SET → ${cookieString}`);
+  console.log(`[Cookie] Expiry (IST): ${expiresIST}`);
+};
+
+
+const getCookie = (name) => {
+  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+  const value = match ? decodeURIComponent(match[2]) : null;
+
+  console.log(`[Cookie] GET → ${name}:`, value);
+  return value;
+};
+
+const deleteCookie = (name) => {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  console.log(`[Cookie] DELETE → ${name}`);
+};
+
+/* ------------------ JWT Decoder ------------------ */
 const parseJwt = (token) => {
   try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    console.log("[JWT] Raw token:", token);
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
       atob(base64)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
     );
-    return JSON.parse(jsonPayload);
-  } catch {
+    const parsed = JSON.parse(jsonPayload);
+    console.log("[JWT] Decoded payload:", parsed);
+    return parsed;
+  } catch (err) {
+    console.error("[JWT] Failed to parse token:", err);
     return null;
   }
 };
 
+/* ------------------ Login Hook ------------------ */
 export const useLoginValidation = () => {
-  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [loginErrors, setLoginErrors] = useState({});
 
-  // Validate loginData and update errors state
   const validateLogin = () => {
+    console.log("[Login] Validating loginData:", loginData);
     const errors = {};
     if (!loginData.username.trim()) {
-      errors.username = 'Username is required';
+      errors.username = "Username is required";
     } else if (loginData.username.trim().length < 3) {
-      errors.username = 'Username must be at least 3 characters';
+      errors.username = "Username must be at least 3 characters";
     }
 
     if (!loginData.password) {
-      errors.password = 'Password is required';
+      errors.password = "Password is required";
     } else if (loginData.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
+      errors.password = "Password must be at least 6 characters";
     }
 
     setLoginErrors(errors);
-    return errors;  // return fresh errors for immediate use
+    console.log("[Login] Validation result:", errors);
+    return errors;
   };
 
   const login = async () => {
-    // console.log('login() called with:', loginData);
+    console.log("[Login] login() called with:", loginData);
+
     const errors = validateLogin();
     if (Object.keys(errors).length > 0) {
-      // console.log('Validation failed:', errors);
+      console.warn("[Login] Validation failed:", errors);
       return { success: false, errors };
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:2500/api/auth/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      console.log("[Login] Sending request to /api/auth/token");
+      const response = await fetch("http://127.0.0.1:2500/api/auth/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
       });
-      // console.log('Response status:', response.status);
+
+      console.log("[Login] Response status:", response.status);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        // console.log('Error response body:', errorData);
-        return { success: false, errors: { general: errorData.detail || 'Login failed' } };
+        console.error("[Login] Error response:", errorData);
+        return {
+          success: false,
+          errors: { general: errorData.detail || "Login failed" },
+        };
       }
 
       const data = await response.json();
-      // console.log('Success response data:', data);
+      console.log("[Login] Success response data:", data);
 
       if (data.access_token) {
-        localStorage.setItem('authToken', data.access_token);
+        console.log("[Login] Token received:", data.access_token);
 
-        // Decode username from JWT token and store it
+        // Decode JWT for username
         const payload = parseJwt(data.access_token);
-        if (payload && payload.sub) {
-          localStorage.setItem('username', payload.sub);
-          // console.log('Username stored in localStorage:', payload.sub);
-        } else {
-          // console.warn('Username (sub) not found in token payload');
-        }
+        const username = payload?.sub || loginData.username;
+
+        console.log("[Login] Username resolved from token:", username);
+
+        // Store in cookies for 1 minute
+        setCookie("accessToken", data.access_token, 1);
+        setCookie("username", username, 1);
       } else {
-        return { success: false, errors: { general: 'Invalid token received' } };
+        console.error("[Login] No access_token in response!");
+        return { success: false, errors: { general: "Invalid token received" } };
       }
 
+      console.log("[Login] Login successful");
       return { success: true, data };
-    } catch (error) {
-      // console.error('Network or unexpected error:', error);
-      return { success: false, errors: { general: 'Network error, please try again later.' } };
+    } catch (err) {
+      console.error("[Login] Network or unexpected error:", err);
+      return {
+        success: false,
+        errors: { general: "Network error, please try again later." },
+      };
     }
   };
 
@@ -90,84 +144,94 @@ export const useLoginValidation = () => {
     loginData,
     setLoginData,
     loginErrors,
-    setLoginErrors,    // <-- Make sure to return this!
+    setLoginErrors,
     validateLogin,
     login,
   };
 };
 
+/* ------------------ Signup Hook ------------------ */
 export const useSignupValidation = () => {
   const [signupData, setSignupData] = useState({
-    username: '',
-    password: '',
-    name: '',
-    useremail: '',
+    username: "",
+    password: "",
+    name: "",
+    useremail: "",
   });
   const [signupErrors, setSignupErrors] = useState({});
 
   const validateSignup = () => {
+    console.log("[Signup] Validating signupData:", signupData);
     const errors = {};
 
     if (!signupData.name.trim()) {
-      errors.name = 'Name is required';
+      errors.name = "Name is required";
     } else if (signupData.name.trim().length < 3) {
-      errors.name = 'Name must be at least 3 characters';
+      errors.name = "Name must be at least 3 characters";
     }
 
     if (!signupData.username.trim()) {
-      errors.username = 'Username is required';
+      errors.username = "Username is required";
     } else if (signupData.username.trim().length < 3) {
-      errors.username = 'Username must be at least 3 characters';
+      errors.username = "Username must be at least 3 characters";
     }
 
     if (!signupData.useremail.trim()) {
-      errors.useremail = 'Email is required';
+      errors.useremail = "Email is required";
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(signupData.useremail)
     ) {
-      errors.useremail = 'Invalid email address';
+      errors.useremail = "Invalid email address";
     }
 
     if (!signupData.password) {
-      errors.password = 'Password is required';
+      errors.password = "Password is required";
     } else if (signupData.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
+      errors.password = "Password must be at least 6 characters";
     }
 
     setSignupErrors(errors);
-    return errors;  // Return fresh errors for immediate use
+    console.log("[Signup] Validation result:", errors);
+    return errors;
   };
 
   const signup = async () => {
-    // console.log('signup() called with:', signupData);
+    console.log("[Signup] signup() called with:", signupData);
+
     const errors = validateSignup();
     if (Object.keys(errors).length > 0) {
-      // console.log('Validation failed:', errors);
+      console.warn("[Signup] Validation failed:", errors);
       return { success: false, errors };
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:2500/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      console.log("[Signup] Sending request to /api/auth/signup");
+      const response = await fetch("http://127.0.0.1:2500/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(signupData),
       });
 
-      // console.log('Response status:', response.status);
+      console.log("[Signup] Response status:", response.status);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        // console.log('Error response body:', errorData);
-        return { success: false, errors: { general: errorData.detail || 'Signup failed' } };
+        console.error("[Signup] Error response:", errorData);
+        return {
+          success: false,
+          errors: { general: errorData.detail || "Signup failed" },
+        };
       }
 
       const data = await response.json();
-      // console.log('Success response data:', data);
-
+      console.log("[Signup] Success response data:", data);
       return { success: true, data };
-    } catch (error) {
-      // console.error('Network or unexpected error:', error);
-      return { success: false, errors: { general: 'Network error, please try again later.' } };
+    } catch (err) {
+      console.error("[Signup] Network or unexpected error:", err);
+      return {
+        success: false,
+        errors: { general: "Network error, please try again later." },
+      };
     }
   };
 
@@ -175,8 +239,11 @@ export const useSignupValidation = () => {
     signupData,
     setSignupData,
     signupErrors,
-    setSignupErrors,   // <-- Return setter here as well
+    setSignupErrors,
     validateSignup,
     signup,
   };
 };
+
+/* ------------------ Export cookie utils (for logout etc.) ------------------ */
+export { getCookie, deleteCookie };

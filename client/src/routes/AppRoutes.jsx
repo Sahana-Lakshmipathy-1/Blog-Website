@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 import BlogForm from "@/components/BlogForm";
 import BlogLayout from "@/layouts/BlogLayout";
@@ -11,19 +12,34 @@ import About from "@/pages/About";
 import Login from "@/pages/Login";
 import BlogWizard from "@/components/BlogWizard";
 
-// Auth check: returns true if token exists
-const isAuthenticated = () => !!localStorage.getItem("authToken");
+/* ------------------ Auth Check ------------------ */
+// Returns true if token exists in cookies
+const isAuthenticated = () => {
+  const token = Cookies.get("accessToken");
+  console.log("[Router] Checking auth → token:", token ? "FOUND" : "MISSING");
+  return !!token;
+};
 
-// Wrapper for protected routes
+/* ------------------ Route Guards ------------------ */
 const RequireAuth = ({ children }) => {
-  return isAuthenticated() ? <>{children}</> : <Navigate to="/login" replace />;
+  if (!isAuthenticated()) {
+    console.log("[Router] Protected route → no token, redirecting to /login");
+    return <Navigate to="/login" replace />;
+  }
+  console.log("[Router] Protected route → token found, rendering page");
+  return <>{children}</>;
 };
 
-// Wrapper for public routes (redirect if logged in)
 const RedirectIfAuth = ({ children }) => {
-  return isAuthenticated() ? <Navigate to="/" replace /> : <>{children}</>;
+  if (isAuthenticated()) {
+    console.log("[Router] Already logged in → redirecting to /");
+    return <Navigate to="/" replace />;
+  }
+  console.log("[Router] Public route → not logged in, rendering page");
+  return <>{children}</>;
 };
 
+/* ------------------ Routes ------------------ */
 const AppRoutes = () => {
   return (
     <Routes>
