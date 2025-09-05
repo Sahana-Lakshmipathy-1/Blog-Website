@@ -1,24 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://127.0.0.1:2500/api";
 
-const useBlogFormState = () => {
+const useBlogFormState = (initialData = {}) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    title: "",
-    subtitle: "",
-    content: "",
-    badge: "New Article",
-    img_file: null, // file upload
+    title: initialData.title || "",
+    subtitle: initialData.subtitle || "",
+    content: initialData.content || "",
+    badge: initialData.badge || "New Article",
+    img_file: null,          // file upload
+    img_url: initialData.img_url || "", // for existing image
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  // If initialData changes (e.g., fetched blog), update formData
+  useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        title: initialData.title || "",
+        subtitle: initialData.subtitle || "",
+        content: initialData.content || "",
+        badge: initialData.badge || "New Article",
+        img_url: initialData.img_url || "",
+      }));
+    }
+  }, [initialData]);
 
   const resetForm = () => {
     setFormData({
@@ -27,6 +42,7 @@ const useBlogFormState = () => {
       content: "",
       badge: "New Article",
       img_file: null,
+      img_url: "",
     });
   };
 
@@ -40,7 +56,6 @@ const useBlogFormState = () => {
       const username = Cookies.get("username");
 
       if (!token || !username) {
-        // clear cookies if session invalid
         Cookies.remove("accessToken");
         Cookies.remove("username");
         navigate("/login");
@@ -57,7 +72,6 @@ const useBlogFormState = () => {
           : `${API_BASE_URL}/blogs`;
       const method = type === "update" ? "PUT" : "POST";
 
-      // Build FormData payload
       const payload = new FormData();
       payload.append("title", formData.title.trim());
       payload.append("subtitle", formData.subtitle?.trim() || "");
@@ -71,7 +85,7 @@ const useBlogFormState = () => {
       const response = await fetch(url, {
         method,
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ don't set Content-Type manually
+          Authorization: `Bearer ${token}`,
         },
         body: payload,
       });
@@ -84,7 +98,7 @@ const useBlogFormState = () => {
       }
 
       setSuccess(
-        `✅ Blog ${type === "update" ? "updated" : "created"} successfully!`
+        `Blog ${type === "update" ? "updated" : "created"} successfully!`
       );
 
       const blogId = type === "create" ? result.id : id;
@@ -93,7 +107,7 @@ const useBlogFormState = () => {
         navigate(`/blogs/${blogId}`);
       }, 1500);
     } catch (err) {
-      console.error("❌ handleSubmit error:", err);
+      console.error("handleSubmit error:", err);
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -107,6 +121,7 @@ const useBlogFormState = () => {
     error,
     success,
     handleSubmit,
+    resetForm,
   };
 };
 

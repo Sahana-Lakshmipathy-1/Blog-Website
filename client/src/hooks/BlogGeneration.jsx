@@ -106,7 +106,6 @@ const useBlogWizard = () => {
         throw new Error(result.detail || "Failed to publish blog.");
       }
 
-      alert(`✅ Blog "${result.title}" published 🚀`);
     } catch (err) {
       console.error("❌ handlePublish error:", err);
       setError(err.message || "Failed to publish blog.");

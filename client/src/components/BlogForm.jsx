@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import useBlogFormState from "../hooks/BlogValidation";
 
 import {
@@ -15,47 +16,54 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-
 const BlogForm = ({ isEdit = false }) => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [loadingBlog, setLoadingBlog] = useState(false);
 
   const { formData, setFormData, loading, error, success, handleSubmit } =
     useBlogFormState();
 
-  // Fetch blog data if editing
+  // ---------------- Fetch blog for edit ----------------
   useEffect(() => {
     if (!isEdit || !id) return;
 
     const fetchBlog = async () => {
+      setLoadingBlog(true);
       try {
-        const token = localStorage.getItem("authToken");
-        if (!token) return;
+        const token = Cookies.get("accessToken"); //  Use cookie, not localStorage
+        if (!token) {
+          navigate("/login");
+          return;
+        }
 
-        const response = await fetch(`http://127.0.0.1:2500/api/blogs/${id}`, {
+        const res = await fetch(`http://127.0.0.1:2500/api/blogs/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (!response.ok) throw new Error("Failed to fetch blog");
+        if (!res.ok) throw new Error("Failed to fetch blog");
 
-        const data = await response.json();
+        const data = await res.json();
 
         setFormData({
-          title: data?.title || "",
-          subtitle: data?.subtitle || "",
-          content: data?.content || "",
-          badge: data?.badge || "New Article",
-          img_file: null,          // new file state
-          img_url: data?.img_url || "",
+          title: data.title || "",
+          subtitle: data.subtitle || "",
+          content: data.content || "",
+          badge: data.badge || "New Article",
+          img_file: null,
+          img_url: data.img_url || "",
         });
       } catch (err) {
         console.error("Error fetching blog:", err.message);
+      } finally {
+        setLoadingBlog(false);
       }
     };
 
     fetchBlog();
-  }, [isEdit, id]);
+  }, [isEdit, id, setFormData, navigate]);
 
+  // ---------------- Handle input changes ----------------
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "img_file" && files.length > 0) {
@@ -65,6 +73,7 @@ const BlogForm = ({ isEdit = false }) => {
     }
   };
 
+  // ---------------- Handle form submission ----------------
   const onSubmit = (e) => {
     e.preventDefault();
     handleSubmit(isEdit ? "update" : "create", isEdit ? id : null);
@@ -75,12 +84,12 @@ const BlogForm = ({ isEdit = false }) => {
       ? "Updating..."
       : "Saving..."
     : isEdit
-      ? "Update Blog"
-      : "Submit";
-    
-  const handleClick = (path) => {
-    navigate(path);
-  };
+    ? "Update Blog"
+    : "Submit";
+
+  if (isEdit && loadingBlog) {
+    return <p className="text-center text-gray-500 mt-10">Loading blog...</p>;
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -159,32 +168,31 @@ const BlogForm = ({ isEdit = false }) => {
                 accept="image/*"
                 onChange={handleChange}
               />
-              {formData.img_file && (
+              {formData.img_file ? (
                 <p className="text-sm text-gray-500">
                   Selected file: {formData.img_file.name}
                 </p>
-              )}
-              {!formData.img_file && formData.img_url && (
+              ) : formData.img_url ? (
                 <img
                   src={formData.img_url}
                   alt="Existing cover"
                   className="mt-2 max-h-48 rounded-lg"
                 />
-              )}
+              ) : null}
             </div>
 
-            {/* Submit Button */}
             <Button type="submit" className="w-full mt-6 py-3" disabled={loading}>
               {buttonText}
             </Button>
           </form>
+
           <Button
-              type="button"
-              className="w-full py-3 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-transform duration-200"
-              onClick={() => handleClick('/generate')}
-            >
-              Generate with AI
-            </Button>
+            type="button"
+            className="w-full py-3 mt-2 bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-transform duration-200"
+            onClick={() => navigate("/generate")}
+          >
+            Generate with AI
+          </Button>
         </CardContent>
 
         <CardFooter className="text-sm text-gray-500 mt-4">

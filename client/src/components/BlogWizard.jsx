@@ -1,9 +1,21 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ReactMarkdown from "react-markdown";
 import useBlogWizard from "@/hooks/BlogGeneration";
 
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+
 const BlogWizard = ({ username }) => {
+  const navigate = useNavigate();
   const {
     topic,
     setTopic,
@@ -17,6 +29,18 @@ const BlogWizard = ({ username }) => {
     handleGenerate,
     handlePublish,
   } = useBlogWizard(username);
+
+  const [showAlert, setShowAlert] = useState(false);
+
+  const handlePublishWithAlert = async () => {
+    await handlePublish();
+    setShowAlert(true); // show confirmation dialog
+  };
+
+  const goToBlogs = () => {
+    setShowAlert(false);
+    navigate("/blogs");
+  };
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
@@ -76,13 +100,28 @@ const BlogWizard = ({ username }) => {
 
             <Button
               className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg shadow-md"
-              onClick={handlePublish}
+              onClick={handlePublishWithAlert}
             >
-               Publish Blog
+              Publish Blog
             </Button>
           </CardContent>
         </Card>
       )}
+
+      {/* AlertDialog for publish confirmation */}
+      <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Blog Published!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your blog has been successfully published. You can view all blogs now.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogAction onClick={goToBlogs}>
+            Go to Blogs
+          </AlertDialogAction>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
